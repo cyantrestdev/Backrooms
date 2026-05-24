@@ -198,6 +198,8 @@ nav.scrolled {
   padding: 2px;
   border-radius: 50%;
   flex-shrink: 0;
+  order: -1;
+  margin-right: 4px;
 }
 
 .mobile-avatar-img {
@@ -1094,6 +1096,24 @@ nav.scrolled {
   flex-shrink: 0;
 }
 .btn-cart:hover { background: var(--brown); transform: scale(1.1); }
+
+.btn-save {
+  background: var(--ink);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  flex-shrink: 0;
+}
+.btn-save:hover { background: var(--brown); transform: scale(1.1); }
+.btn-save.saved { background: var(--brown); }
+.btn-save.saved svg { fill: white; }
 
 /* Skeleton loader */
 .product-skel {

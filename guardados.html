@@ -22,7 +22,7 @@
     }
 
     .guardados-header h1 {
-      font-family: 'Collidge Rounded', serif;
+      font-family: 'Staatliches', sans-serif;
       font-size: 2.2rem;
       color: var(--ink);
       text-transform: uppercase;
@@ -30,7 +30,7 @@
     }
 
     .guardados-count {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Aller', sans-serif;
       font-size: 0.85rem;
       color: var(--text-light);
       font-weight: 500;
@@ -53,13 +53,13 @@
       opacity: 0.35;
     }
     .guardados-empty h2 {
-      font-family: 'Collidge Rounded', serif;
+      font-family: 'Staatliches', sans-serif;
       font-size: 1.4rem;
       color: var(--ink);
       text-transform: uppercase;
     }
     .guardados-empty p {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Aller', sans-serif;
       font-size: 0.93rem;
       color: var(--text-light);
       max-width: 320px;
@@ -77,13 +77,13 @@
     }
     .guardados-no-session.visible { display: flex; }
     .guardados-no-session h2 {
-      font-family: 'Collidge Rounded', serif;
+      font-family: 'Staatliches', sans-serif;
       font-size: 1.4rem;
       color: var(--ink);
       text-transform: uppercase;
     }
     .guardados-no-session p {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Aller', sans-serif;
       font-size: 0.93rem;
       color: var(--text-light);
     }
@@ -133,7 +133,7 @@
     }
 
     .guardado-name {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Aller', sans-serif;
       font-size: 0.9rem;
       font-weight: 700;
       color: var(--ink);
@@ -144,14 +144,22 @@
       font-size: 0.75rem;
       color: var(--text-light);
       font-weight: 500;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Aller', sans-serif;
     }
 
     .guardado-price {
-      font-family: 'Collidge Rounded', serif;
+      font-family: 'Staatliches', sans-serif;
       font-size: 1rem;
       color: var(--brown);
       margin-top: 8px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .guardado-old-price {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      text-decoration: line-through;
     }
 
     /* Botón quitar guardado */
@@ -212,10 +220,10 @@
 
   <!-- NAV -->
   <nav id="navbar" class="visible scrolled">
-    <button class="mobile-avatar-btn" id="mobileAvatarBtn" style="display:none" aria-label="Menú de perfil">
+    <a class="mobile-avatar-btn" id="mobileAvatarBtn" href="perfil.html" style="display:none" aria-label="Ir a mi perfil">
       <img class="mobile-avatar-img" id="mobileAvatarImg" src="" alt="Perfil" />
-    </button>
-    <a class="logo" href="backrooms.html">
+    </a>
+    <a class="logo" href="index.html">
       <svg class="logo-icon" viewBox="0 0 502.44 474.82" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M240.58,272.76 L6.03,361.72 L4.13,4.13 L240.85,58.45 L240.58,273.05" fill="rgba(255,255,255,0.6)" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
         <path d="M258.43,275.12 L489.83,354.2 L486.45,4.13 L257.83,57.25 L258.18,274.07" fill="rgba(255,255,255,0.85)" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
@@ -232,9 +240,9 @@
     </button>
     <div class="nav-right-group">
       <div class="nav-links">
-        <a href="backrooms.html">Inicio</a>
-        <a href="backrooms.html#catalogo">Catálogo</a>
-        <a href="#">Contacto</a>
+        <a href="index.html">Inicio</a>
+        <a href="index.html#catalogo">Catálogo</a>
+        <a href="https://www.instagram.com/backrooms.pape/" target="_blank">Contacto</a>
       </div>
       <div class="nav-auth" id="navAuth">
         <button class="btn-auth" id="btnLogin">Iniciar sesión</button>
@@ -279,9 +287,9 @@
       </a>
       <div class="drawer-divider"></div>
       <ul>
-        <li><a href="backrooms.html">Inicio</a></li>
-        <li><a href="backrooms.html#catalogo">Catálogo</a></li>
-        <li><a href="#">Contacto</a></li>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="index.html#catalogo">Catálogo</a></li>
+        <li><a href="https://www.instagram.com/backrooms.pape/" target="_blank">Contacto</a></li>
       </ul>
       <div class="drawer-divider"></div>
       <button class="drawer-signout" id="drawerSignout" style="display:none">
@@ -347,7 +355,7 @@
       <div class="guardados-empty-icon">📌</div>
       <h2>Sin guardados aún</h2>
       <p>Guarda productos desde el catálogo tocando el marcador en cada tarjeta.</p>
-      <a href="backrooms.html#catalogo" class="btn-primary">Explorar catálogo</a>
+      <a href="index.html#catalogo" class="btn-primary">Explorar catálogo</a>
     </div>
 
     <!-- Grid -->
@@ -408,7 +416,7 @@
     // Cargar desde Supabase (tabla guardados + join con productos si los tienes)
     const { data, error } = await sb
       .from('guardados')
-      .select('*, producto:producto_id(*)')
+      .select('id, producto_id, name, cat, price, emoji, old_price')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
 
@@ -424,17 +432,21 @@
       data.length + (data.length === 1 ? ' producto guardado' : ' productos guardados');
 
     data.forEach(item => {
-      const p = item.producto || item;
       const card = document.createElement('a');
       card.className = 'guardado-card';
       card.href = '#';
       card.innerHTML = `
-        <button class="btn-unsave" data-id="${item.id}" title="Quitar de guardados">✕</button>
-        <div class="guardado-img">${p.emoji || '📦'}</div>
+        <button class="btn-unsave" data-id="${item.id}" title="Quitar de guardados">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <div class="guardado-img">${item.emoji || '📦'}</div>
         <div class="guardado-body">
-          <div class="guardado-name">${p.name || 'Producto'}</div>
-          <div class="guardado-category">${p.cat || ''}</div>
-          <div class="guardado-price">$${p.price || '—'}</div>
+          <div class="guardado-name">${item.name || 'Producto'}</div>
+          <div class="guardado-category">${item.cat ? item.cat.charAt(0).toUpperCase() + item.cat.slice(1) : ''}</div>
+          <div class="guardado-price">
+            $${item.price || '—'}
+            ${item.old_price ? `<span class="guardado-old-price">$${item.old_price}</span>` : ''}
+          </div>
         </div>`;
       grid.appendChild(card);
 

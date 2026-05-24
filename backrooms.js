@@ -254,15 +254,6 @@ async function setNavLoggedIn(user) {
   if (mobileAvatarBtn && mobileAvatarImg) {
     mobileAvatarImg.src = fallback;
     mobileAvatarBtn.classList.add('show');
-    // Solo agregar el listener una vez
-    if (!mobileAvatarBtn.dataset.bound) {
-      mobileAvatarBtn.dataset.bound = '1';
-      mobileAvatarBtn.addEventListener('click', () => {
-        document.getElementById('fullMenu')?.classList.add('open');
-        document.getElementById('fullMenuOverlay')?.classList.add('visible');
-        document.body.style.overflow = 'hidden';
-      });
-    }
   }
 
   try {
@@ -337,15 +328,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const splash = document.getElementById('splash');
   const navbar = document.getElementById('navbar');
 
-  // Mostrar splash
-  splash.classList.add('animate-logo');
-  setTimeout(() => {
-    splash.classList.add('animate-slide');
+  // Mostrar splash solo la primera vez
+  if (!localStorage.getItem('backrooms_splash_shown')) {
+    localStorage.setItem('backrooms_splash_shown', '1');
+    splash.classList.add('animate-logo');
     setTimeout(() => {
-      splash.classList.add('done');
-      setTimeout(() => splash.remove(), 350);
-    }, 600);
-  }, 1100);
+      splash.classList.add('animate-slide');
+      setTimeout(() => {
+        splash.classList.add('done');
+        setTimeout(() => splash.remove(), 350);
+      }, 600);
+    }, 1100);
+  } else {
+    splash.remove();
+  }
 
   // Nav visible
   setTimeout(() => navbar?.classList.add('visible'), 200);
@@ -414,7 +410,6 @@ const PRODUCTS = [
 function loadProducts(filter) {
   const grid = document.getElementById('productsGrid');
 
-  // Skeleton breve
   grid.innerHTML = Array(4).fill(`
     <div class="product-skel">
       <div class="skel-img"></div>
@@ -422,12 +417,23 @@ function loadProducts(filter) {
       <div class="skel-line short"></div>
     </div>`).join('');
 
-  setTimeout(() => {
+  (async () => {
+    await new Promise(r => setTimeout(r, 500));
     const filtered = filter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === filter);
 
     if (!filtered.length) {
       grid.innerHTML = `<p style="grid-column:1/-1;color:var(--text-light);padding:40px 0;">Sin productos en esta categoría por ahora.</p>`;
       return;
+    }
+
+    // Cargar guardados del usuario si hay sesión
+    let savedIds = new Set();
+    if (sb) {
+      const { data: sessionData } = await sb.auth.getSession();
+      if (sessionData?.session?.user) {
+        const { data } = await sb.from('guardados').select('producto_id').eq('user_id', sessionData.session.user.id);
+        if (data) savedIds = new Set(data.map(r => r.producto_id));
+      }
     }
 
     grid.innerHTML = filtered.map(p => `
@@ -444,12 +450,44 @@ function loadProducts(filter) {
               $${p.price}
               ${p.oldPrice ? `<span class="old">$${p.oldPrice}</span>` : ''}
             </div>
-            <button class="btn-cart" title="Agregar al carrito" onclick="addToCart(${p.id})">+</button>
+            <button class="btn-save ${savedIds.has(p.id) ? 'saved' : ''}" data-id="${p.id}" title="${savedIds.has(p.id) ? 'Quitar de guardados' : 'Guardar'}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="${savedIds.has(p.id) ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
           </div>
         </div>
       </div>
     `).join('');
-  }, 500);
+
+    // Listeners de guardar
+    grid.querySelectorAll('.btn-save').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!sb) { openModal?.(); return; }
+        const { data: sessionData } = await sb.auth.getSession();
+        if (!sessionData?.session?.user) { openModal?.(); return; }
+        const userId = sessionData.session.user.id;
+        const productId = parseInt(btn.dataset.id);
+        const isSaved = btn.classList.contains('saved');
+        if (isSaved) {
+          await sb.from('guardados').delete().eq('user_id', userId).eq('producto_id', productId);
+          btn.classList.remove('saved');
+          btn.title = 'Guardar';
+          btn.querySelector('svg').setAttribute('fill', 'none');
+        } else {
+          const product = PRODUCTS.find(p => p.id === productId);
+          const { error: saveErr } = await sb.from('guardados').insert({
+            user_id: userId, producto_id: productId,
+            name: product.name, cat: product.cat, price: product.price,
+            emoji: product.emoji, badge: product.badge || null, old_price: product.oldPrice || null
+          });
+          if (saveErr) { console.error('Error al guardar:', saveErr.message); return; }
+          btn.classList.add('saved');
+          btn.title = 'Quitar de guardados';
+          btn.querySelector('svg').setAttribute('fill', 'currentColor');
+        }
+      });
+    });
+  })();
 }
 
 function addToCart(id) {

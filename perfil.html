@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi perfil — Backrooms</title>
+  <link rel="stylesheet" href="backrooms.css" />
+  <style>
+/* ══════════════════════════════════════════════
+   PERFIL — PASAPORTE BACKROOMS
+   Estructura idéntica a EcoLinces, colores Backrooms
+══════════════════════════════════════════════ */
+
+/* Fondos aero adaptados a paleta café/beige */
+.perfil-bg { min-height:100vh; transition:background 0.5s ease; background-size:cover; background-position:center; background-attachment:fixed; }
+
+.perfil-bg[data-theme="aero-latte"] {
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(212,184,150,0.85) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 70%, rgba(196,163,122,0.7) 0%, transparent 50%),
+    linear-gradient(160deg, #f0e4d4 0%, #e8d5bf 40%, #ddc8a8 100%);
+}
+.perfil-bg[data-theme="aero-beige"] {
+  background-image:
+    radial-gradient(ellipse at 15% 25%, rgba(240,228,210,0.9) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 60%, rgba(220,200,175,0.7) 0%, transparent 50%),
+    linear-gradient(160deg, #faf6f0 0%, #f0e8d8 40%, #e8d8c4 100%);
+}
+.perfil-bg[data-theme="aero-terracota"] {
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(200,140,100,0.7) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 65%, rgba(180,120,90,0.5) 0%, transparent 50%),
+    linear-gradient(160deg, #f5d5c0 0%, #edc4a8 40%, #e0b090 100%);
+}
+.perfil-bg[data-theme="aero-pizarra"] {
+  background-image:
+    radial-gradient(ellipse at 25% 15%, rgba(120,100,80,0.6) 0%, transparent 50%),
+    radial-gradient(ellipse at 75% 70%, rgba(90,70,50,0.4) 0%, transparent 50%),
+    linear-gradient(160deg, #d4c8b8 0%, #c4b8a4 40%, #b4a890 100%);
+}
+.perfil-bg[data-theme="aero-musgo"] {
+  background-image:
+    radial-gradient(ellipse at 20% 30%, rgba(140,160,100,0.7) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 60%, rgba(110,140,80,0.5) 0%, transparent 50%),
+    linear-gradient(160deg, #d4e0b8 0%, #c4d4a4 40%, #b4c490 100%);
+}
+.perfil-bg[data-theme="aero-lavanda"] {
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(200,180,210,0.8) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(175,155,195,0.6) 0%, transparent 50%),
+    linear-gradient(160deg, #ecdff5 0%, #e0d0f0 40%, #d4c0e8 100%);
+}
+.perfil-bg[data-theme="custom"] { background-image:var(--custom-bg-image); }
+
+/* Layout */
+.perfil-layout {
+  display:flex; justify-content:center; align-items:flex-start;
+  padding:calc(var(--nav-height,64px) + 40px) 24px 80px;
+  min-height:100vh;
+}
+.passport-wrap { width:100%; max-width:820px; display:flex; flex-direction:column; gap:14px; }
+
+/* Botón regresar */
+.passport-back {
+  font-family:'Aller',Arial,sans-serif; font-size:0.85rem; font-weight:600;
+  color:rgba(0,0,0,0.5); background:rgba(255,255,255,0.7); border:none;
+  border-radius:999px; padding:8px 18px; cursor:pointer;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  align-self:flex-start; transition:background 0.18s,color 0.18s;
+  box-shadow:0 1px 4px rgba(0,0,0,0.09); text-decoration:none; display:inline-block;
+}
+.passport-back:hover { background:rgba(255,255,255,0.92); color:rgba(0,0,0,0.75); }
+
+/* ── EL PASAPORTE ── */
+.passport {
+  background:rgba(255,255,255,0.82); backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px); border-radius:20px;
+  box-shadow:0 8px 48px rgba(0,0,0,0.14),0 2px 8px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.95);
+  display:grid; grid-template-columns:252px 1fr; grid-template-rows:1fr auto;
+  position:relative; overflow:hidden; isolation:isolate;
+}
+
+.passport-divider {
+  position:absolute; left:252px; top:18px; bottom:18px; width:0;
+  border-left:2px dashed rgba(0,0,0,0.1); pointer-events:none; z-index:2;
+}
+
+/* COLUMNA IZQUIERDA */
+.passport-left {
+  grid-column:1; grid-row:1;
+  background:var(--passport-accent,#5c3d1e);
+  padding:24px 20px 22px; display:flex; flex-direction:column; gap:0;
+  position:relative; overflow:hidden; border-radius:20px 0 0 0;
+}
+.passport-left::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(170deg,rgba(255,255,255,0.16) 0%,transparent 45%);
+  pointer-events:none;
+}
+.passport-left::before {
+  content:''; position:absolute; inset:0; opacity:0.05;
+  background-image:radial-gradient(circle,white 1px,transparent 1px);
+  background-size:16px 16px; pointer-events:none;
+}
+
+.passport-header-block { margin-bottom:18px; position:relative; z-index:1; }
+.passport-brand { font-family:'Staatliches',sans-serif; font-size:1.6rem; color:white; letter-spacing:0.08em; text-transform:uppercase; display:block; }
+.passport-type  { font-family:'Aller',Arial,sans-serif; font-size:0.58rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.6); margin-top:4px; display:block; }
+
+.passport-avatar-wrap { position:relative; width:140px; height:140px; margin:0 auto 20px; }
+.passport-avatar { width:140px; height:140px; border-radius:12px; object-fit:cover; border:3px solid rgba(255,255,255,0.4); background:rgba(255,255,255,0.18); display:block; }
+.passport-edit-badge {
+  position:absolute; bottom:-5px; right:-5px; width:24px; height:24px; border-radius:50%;
+  background:var(--bg-surface); color:var(--passport-accent,#5c3d1e);
+  display:flex; align-items:center; justify-content:center; font-size:0.75rem;
+  cursor:pointer; border:2px solid rgba(255,255,255,0.6); transition:transform 0.18s; z-index:3;
+}
+.passport-edit-badge:hover { transform:scale(1.12); }
+
+.passport-identity { position:relative; z-index:1; margin-bottom:14px; text-align:center; }
+.passport-username { font-family:'Staatliches',sans-serif; font-size:1.5rem; color:white; letter-spacing:0.05em; text-transform:uppercase; word-break:break-word; margin-bottom:5px; }
+.passport-bio { font-family:'Aller',Arial,sans-serif; font-size:0.78rem; color:rgba(255,255,255,0.78); line-height:1.5; font-style:italic; }
+
+/* Etiquetas */
+.passport-tags-section { margin-top:14px; position:relative; z-index:1; }
+.passport-tags-label { font-family:'Aller',Arial,sans-serif; font-size:0.58rem; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:rgba(255,255,255,0.55); display:block; margin-bottom:8px; }
+.passport-tags-list { display:flex; flex-wrap:wrap; gap:6px; }
+.passport-tags-list.collapsed { max-height:28px; overflow:hidden; }
+.passport-tag { font-family:'Aller',Arial,sans-serif; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:4px; background:rgba(255,255,255,0.15); color:white; border:1px solid rgba(255,255,255,0.25); letter-spacing:0.3px; }
+.passport-tag.empty { color:rgba(255,255,255,0.35); border-style:dashed; font-style:italic; font-weight:400; }
+.passport-tags-toggle { background:none; border:none; color:rgba(255,255,255,0.6); font-family:'Aller',Arial,sans-serif; font-size:0.68rem; font-weight:700; cursor:pointer; padding:4px 0 0; transition:color 0.2s; }
+.passport-tags-toggle:hover { color:rgba(255,255,255,0.95); }
+
+/* Calcomanías */
+.passport-stickers-section { margin-top:12px; position:relative; z-index:1; }
+.passport-badges-inline { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+.passport-badge-item {
+  width:34px; height:34px; border-radius:8px;
+  background:color-mix(in srgb,var(--passport-accent,#5c3d1e) 30%,white 70%);
+  display:flex; align-items:center; justify-content:center; font-size:1.1rem;
+  box-shadow:0 1px 4px rgba(0,0,0,0.12); border:1.5px solid rgba(255,255,255,0.4);
+}
+
+/* COLUMNA DERECHA */
+.passport-right { grid-column:2; grid-row:1; display:flex; flex-direction:column; min-width:0; }
+
+.passport-login-prompt {
+  flex:1; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; padding:48px 28px; gap:14px;
+  font-family:'Aller',Arial,sans-serif; color:rgba(0,0,0,0.38); font-size:0.88rem; text-align:center;
+}
+.btn-passport-login {
+  font-family:'Aller',Arial,sans-serif; font-size:0.84rem; font-weight:700;
+  padding:9px 22px; border-radius:999px; background:var(--passport-accent,#5c3d1e);
+  color:white; border:none; cursor:pointer; transition:opacity 0.18s;
+}
+.btn-passport-login:hover { opacity:0.84; }
+
+/* Nav tabs */
+.passport-nav {
+  display:flex; gap:0; position:sticky; bottom:0; left:0; right:0; z-index:100;
+  background:rgba(255,255,255,0.72); backdrop-filter:blur(18px) saturate(1.6);
+  -webkit-backdrop-filter:blur(18px) saturate(1.6);
+  border-top:1px solid rgba(0,0,0,0.08); box-shadow:0 -4px 24px rgba(0,0,0,0.06);
+  justify-content:space-around;
+}
+.passport-nav-btn {
+  font-family:'Aller',Arial,sans-serif; font-size:0.62rem; font-weight:700;
+  letter-spacing:0.5px; text-transform:uppercase; padding:10px 8px 8px;
+  border:none; background:none; cursor:pointer; color:rgba(0,0,0,0.33);
+  transition:color 0.18s,background 0.18s; position:relative; flex:1;
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+}
+.passport-nav-btn.active { color:var(--passport-accent,#5c3d1e); }
+.passport-nav-btn.active::before {
+  content:''; position:absolute; top:0; left:20%; right:20%; height:2.5px;
+  background:var(--passport-accent,#5c3d1e); border-radius:0 0 3px 3px;
+}
+.passport-nav-btn:hover:not(.active) { color:rgba(0,0,0,0.55); background:rgba(0,0,0,0.03); }
+
+/* Páginas */
+.passport-pages { flex:1; padding:20px 22px; overflow-y:auto; }
+.passport-page { display:none; }
+.passport-page.active { display:block; }
+
+.page-section-title {
+  font-family:'Staatliches',sans-serif; font-size:1rem; letter-spacing:2px;
+  text-transform:uppercase; color:var(--passport-accent,#5c3d1e); margin-bottom:12px;
+  display:flex; align-items:center; gap:10px;
+}
+.page-section-title::after { content:''; flex:1; height:1px; background:rgba(0,0,0,0.07); }
+
+/* Bio */
+.bio-display { font-family:'Aller',Arial,sans-serif; font-size:0.92rem; color:rgba(0,0,0,0.67); line-height:1.65; margin-bottom:15px; min-height:36px; }
+.bio-empty { color:rgba(0,0,0,0.27); font-style:italic; }
+
+.btn-edit-inline {
+  font-family:'Aller',Arial,sans-serif; font-size:0.77rem; font-weight:600;
+  padding:6px 15px; border-radius:999px; border:1.5px solid var(--passport-accent,#5c3d1e);
+  color:var(--passport-accent,#5c3d1e); background:transparent; cursor:pointer; transition:background 0.18s,color 0.18s;
+}
+.btn-edit-inline:hover { background:var(--passport-accent,#5c3d1e); color:white; }
+
+.bio-edit-wrap { display:none; }
+.bio-edit-wrap.open { display:block; }
+.bio-edit-wrap textarea {
+  width:100%; padding:10px 12px; border:1.5px solid var(--border-subtle); border-radius:10px;
+  font-family:'Aller',Arial,sans-serif; font-size:0.88rem; resize:none; outline:none;
+  box-sizing:border-box; margin-bottom:8px; transition:border-color 0.18s;
+  background:rgba(255,255,255,0.8); color:var(--text-dark);
+}
+.bio-edit-wrap textarea:focus { border-color:var(--passport-accent,#5c3d1e); }
+.bio-edit-actions { display:flex; gap:8px; justify-content:flex-end; margin-bottom:8px; }
+.btn-save-bio,.btn-cancel-bio { font-family:'Aller',Arial,sans-serif; font-size:0.78rem; font-weight:600; padding:6px 15px; border-radius:999px; cursor:pointer; transition:background 0.18s,color 0.18s; }
+.btn-save-bio { background:var(--passport-accent,#5c3d1e); color:white; border:none; }
+.btn-save-bio:hover { opacity:0.86; }
+.btn-cancel-bio { background:none; border:1.5px solid var(--border-subtle); color:var(--text-light); }
+.btn-cancel-bio:hover { border-color:var(--text-light); color:var(--text-dark); }
+
+/* Ajustes */
+.settings-group { margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid rgba(0,0,0,0.06); }
+.settings-group:last-child { border-bottom:none; margin-bottom:0; }
+.settings-input-wrap { position:relative; margin-bottom:6px; }
+.settings-input {
+  width:100%; padding:9px 12px; border:1.5px solid var(--border-subtle); border-radius:8px;
+  font-family:'Aller',Arial,sans-serif; font-size:0.87rem; outline:none;
+  box-sizing:border-box; transition:border-color 0.18s; margin-bottom:8px;
+  background:rgba(255,255,255,0.75); color:var(--text-dark);
+}
+.settings-input:focus { border-color:var(--passport-accent,#5c3d1e); }
+.settings-status { position:absolute; right:10px; top:50%; transform:translateY(-50%); font-family:'Aller',Arial,sans-serif; font-size:0.78rem; font-weight:600; }
+.settings-hint { font-family:'Aller',Arial,sans-serif; font-size:0.7rem; color:rgba(0,0,0,0.36); margin-bottom:10px; }
+.btn-settings-save {
+  font-family:'Aller',Arial,sans-serif; font-size:0.78rem; font-weight:700;
+  padding:7px 17px; border-radius:999px; background:var(--passport-accent,#5c3d1e);
+  color:white; border:none; cursor:pointer; transition:opacity 0.18s;
+}
+.btn-settings-save:hover { opacity:0.84; }
+.btn-settings-save:disabled { opacity:0.36; cursor:default; }
+.settings-save-msg { font-family:'Aller',Arial,sans-serif; font-size:0.74rem; font-weight:600; margin-left:10px; }
+.settings-save-msg.ok  { color:var(--passport-accent,#5c3d1e); }
+.settings-save-msg.err { color:#c62828; }
+
+.strength-bar { height:4px; background:var(--border-subtle); border-radius:2px; margin-bottom:4px; overflow:hidden; }
+.strength-fill { height:100%; width:0%; border-radius:2px; transition:width 0.3s,background 0.3s; }
+.strength-label { font-family:'Aller',Arial,sans-serif; font-size:0.68rem; font-weight:600; display:block; margin-bottom:6px; }
+
+/* Selector de tema */
+.theme-picker { display:flex; flex-direction:column; gap:14px; }
+.theme-picker-label { font-family:'Aller',Arial,sans-serif; font-size:0.68rem; font-weight:700; color:rgba(0,0,0,0.42); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:5px; }
+.theme-bg-options { display:flex; gap:7px; flex-wrap:wrap; align-items:center; }
+.theme-bg-swatch { width:36px; height:36px; border-radius:8px; cursor:pointer; border:3px solid transparent; transition:border-color 0.18s,transform 0.18s; flex-shrink:0; box-shadow:0 1px 4px rgba(0,0,0,0.12); }
+.theme-bg-swatch:hover { transform:scale(1.1); }
+.theme-bg-swatch.active { border-color:var(--passport-accent,#5c3d1e); transform:scale(1.05); }
+.theme-bg-swatch[data-bg="aero-latte"]     { background:linear-gradient(135deg,#f0e4d4,#ddc8a8); }
+.theme-bg-swatch[data-bg="aero-beige"]     { background:linear-gradient(135deg,#faf6f0,#e8d8c4); }
+.theme-bg-swatch[data-bg="aero-terracota"] { background:linear-gradient(135deg,#f5d5c0,#e0b090); }
+.theme-bg-swatch[data-bg="aero-pizarra"]   { background:linear-gradient(135deg,#d4c8b8,#b4a890); }
+.theme-bg-swatch[data-bg="aero-musgo"]     { background:linear-gradient(135deg,#d4e0b8,#b4c490); }
+.theme-bg-swatch[data-bg="aero-lavanda"]   { background:linear-gradient(135deg,#ecdff5,#d4c0e8); }
+
+.theme-bg-upload-btn {
+  width:36px; height:36px; border-radius:8px; cursor:pointer;
+  border:2px dashed rgba(0,0,0,0.24); background:rgba(255,255,255,0.55);
+  display:flex; align-items:center; justify-content:center; font-size:0.95rem;
+  color:rgba(0,0,0,0.38); transition:border-color 0.18s,background 0.18s,transform 0.18s;
+  flex-shrink:0; position:relative; overflow:hidden;
+}
+.theme-bg-upload-btn:hover { border-color:var(--passport-accent,#5c3d1e); color:var(--passport-accent,#5c3d1e); background:rgba(255,255,255,0.85); transform:scale(1.08); }
+.theme-bg-upload-btn.active { border-style:solid; border-color:var(--passport-accent,#5c3d1e); }
+.theme-bg-upload-btn input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+.theme-custom-thumb { width:36px; height:36px; border-radius:8px; object-fit:cover; border:3px solid var(--passport-accent,#5c3d1e); display:none; cursor:pointer; flex-shrink:0; }
+.theme-custom-thumb.visible { display:block; }
+
+.theme-accent-options { display:flex; gap:7px; flex-wrap:wrap; }
+.theme-accent-swatch { width:28px; height:28px; border-radius:50%; cursor:pointer; border:3px solid transparent; transition:border-color 0.18s,transform 0.18s,box-shadow 0.18s; flex-shrink:0; box-shadow:0 1px 4px rgba(0,0,0,0.15); }
+.theme-accent-swatch:hover { transform:scale(1.15); }
+.theme-accent-swatch.active { border-color:rgba(0,0,0,0.22); box-shadow:0 0 0 2px white inset,0 1px 4px rgba(0,0,0,0.15); transform:scale(1.08); }
+.theme-accent-row { display:flex; align-items:center; flex-wrap:wrap; gap:7px; }
+
+/* Etiquetas en ajustes */
+.tag-picker { display:flex; flex-wrap:wrap; gap:7px; margin-top:8px; }
+.tag-option { font-family:'Aller',Arial,sans-serif; font-size:0.75rem; font-weight:600; padding:5px 12px; border-radius:4px; border:1.5px solid var(--border-subtle); background:var(--bg-surface); color:var(--text-mid); cursor:pointer; transition:all 0.18s; user-select:none; }
+.tag-option:hover { border-color:var(--passport-accent,#5c3d1e); color:var(--passport-accent,#5c3d1e); }
+.tag-option.selected { background:var(--passport-accent,#5c3d1e); border-color:var(--passport-accent,#5c3d1e); color:white; }
+.tag-option.disabled:not(.selected) { opacity:0.38; cursor:not-allowed; }
+.tag-picker-hint { font-family:'Aller',Arial,sans-serif; font-size:0.7rem; color:rgba(0,0,0,0.38); margin-top:6px; display:block; }
+
+/* Calcomanías en ajustes */
+.badge-picker { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.badge-option { width:40px; height:40px; border-radius:8px; background:var(--bg-surface-2); border:2px solid var(--border-subtle); display:flex; align-items:center; justify-content:center; font-size:1.3rem; cursor:pointer; transition:all 0.18s; position:relative; }
+.badge-option:hover { border-color:var(--passport-accent,#5c3d1e); transform:scale(1.1); }
+.badge-option.selected { border-color:var(--passport-accent,#5c3d1e); background:var(--passport-accent,#5c3d1e); }
+.badge-option.selected::after { content:'✓'; position:absolute; bottom:-2px; right:-2px; width:14px; height:14px; background:var(--passport-accent,#5c3d1e); color:white; border-radius:50%; font-size:0.55rem; display:flex; align-items:center; justify-content:center; border:1.5px solid white; }
+.badge-picker-hint { font-family:'Aller',Arial,sans-serif; font-size:0.7rem; color:rgba(0,0,0,0.38); margin-top:6px; display:block; }
+
+/* Subsecciones */
+.passport-customize-sub { border-top:1px solid var(--border-subtle); padding-top:14px; }
+.passport-customize-sub:first-child { border-top:none; padding-top:0; }
+.passport-customize-sub-label { font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-mid); margin-bottom:2px; }
+
+/* Selector de interfaz */
+.dark-mode-row { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:4px 0; }
+.dark-mode-info { display:flex; flex-direction:column; gap:3px; }
+.dark-mode-label { font-family:'Aller',Arial,sans-serif; font-size:0.92rem; font-weight:700; color:var(--text-dark); cursor:default; }
+.dark-mode-desc  { font-family:'Aller',Arial,sans-serif; font-size:0.78rem; color:var(--text-light); }
+.theme-select {
+  font-family:'Aller',Arial,sans-serif; font-size:0.88rem; font-weight:600;
+  padding:8px 32px 8px 14px; border-radius:10px; border:1.5px solid var(--border-subtle);
+  background:var(--bg-surface-2); color:var(--text-dark); cursor:pointer;
+  appearance:none; -webkit-appearance:none; min-width:120px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 12px center;
+  transition:border-color 0.2s;
+}
+.theme-select:focus { outline:none; border-color:var(--passport-accent,#5c3d1e); }
+
+/* Sidebar stats */
+.passport-sidebar-info {
+  padding:18px 18px 24px; display:flex; flex-direction:column; gap:14px;
+  background:rgba(255,255,255,0.92); border-radius:24px; margin:14px 16px 18px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.08);
+}
+.passport-joined { font-family:'Aller',Arial,sans-serif; font-size:0.65rem; letter-spacing:0.5px; text-transform:uppercase; color:rgba(0,0,0,0.42); }
+.passport-stats  { display:flex; gap:10px; }
+.passport-stat   { flex:1; min-width:0; text-align:center; display:flex; flex-direction:column; justify-content:center; gap:8px; padding:18px 12px; background:var(--passport-accent,#5c3d1e); border-radius:18px; color:white; }
+.passport-stat-value { font-family:'Staatliches',sans-serif; font-size:1.35rem; color:white; line-height:1; }
+.passport-stat-label { font-family:'Aller',Arial,sans-serif; font-size:0.52rem; letter-spacing:0.4px; text-transform:uppercase; color:rgba(255,255,255,0.9); }
+.passport-member { display:flex; flex-direction:column; gap:4px; background:var(--passport-accent,#5c3d1e); border-radius:18px; padding:16px 14px; }
+.passport-member-label  { font-family:'Aller',Arial,sans-serif; font-size:0.6rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.6); }
+.passport-member-number { font-family:'Staatliches',sans-serif; font-size:1.1rem; color:rgba(255,255,255,0.9); letter-spacing:0.05em; }
+
+/* Footer */
+.passport-footer {
+  grid-column:1/-1; grid-row:2; display:flex; justify-content:space-between;
+  align-items:center; padding:10px 20px;
+  border-top:2px dashed rgba(0,0,0,0.09); background:rgba(0,0,0,0.018);
+  border-radius:0 0 20px 20px;
+}
+.passport-footer-brand { font-family:'Aller',Arial,sans-serif; font-size:0.72rem; letter-spacing:0.2px; color:rgba(0,0,0,0.42); }
+.passport-barcode { display:flex; align-items:center; gap:2px; height:20px; }
+.passport-barcode span { display:inline-block; width:2px; background:rgba(0,0,0,0.16); border-radius:1px; }
+
+/* Responsive */
+@media (max-width:620px) {
+  .passport { grid-template-columns:1fr; grid-template-rows:auto auto auto; border-radius:18px; }
+  .passport-divider { display:none; }
+  .passport-left { grid-column:1; grid-row:1; border-radius:18px 18px 0 0; }
+  .passport-right { grid-column:1; grid-row:2; }
+  .passport-footer { grid-column:1; grid-row:3; border-radius:0 0 18px 18px; }
+  .passport-pages { padding:16px 14px; }
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .passport { background:rgba(42,42,42,0.96); box-shadow:0 8px 48px rgba(0,0,0,0.45),0 2px 8px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.05); }
+[data-theme="dark"] .passport-nav { background:rgba(38,38,38,0.95); border-top-color:rgba(255,255,255,0.10); }
+[data-theme="dark"] .passport-nav-btn { color:rgba(255,255,255,0.45) !important; }
+[data-theme="dark"] .passport-nav-btn.active { color:var(--passport-accent,#5c3d1e) !important; }
+[data-theme="dark"] .passport-sidebar-info { background:rgba(22,22,22,0.82); }
+[data-theme="dark"] .passport-footer { border-top-color:rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); }
+[data-theme="dark"] .passport-footer-brand { color:rgba(255,255,255,0.45); }
+[data-theme="dark"] .passport-barcode span { background:rgba(255,255,255,0.18); }
+[data-theme="dark"] .page-section-title { color:var(--passport-accent,#5c3d1e); }
+[data-theme="dark"] .passport-back { background:rgba(255,255,255,0.07); color:var(--text-dark); border:1px solid rgba(255,255,255,0.1); }
+[data-theme="dark"] input, [data-theme="dark"] textarea, [data-theme="dark"] select { color-scheme:dark; }
+[data-theme="dark"] .settings-input, [data-theme="dark"] .bio-edit-wrap textarea, [data-theme="dark"] .tab-content input { background:var(--bg-surface-2) !important; color:var(--text-dark) !important; border-color:var(--border-subtle) !important; }
+[data-theme="dark"] input:-webkit-autofill { -webkit-box-shadow:0 0 0 60px #2c2c2c inset !important; -webkit-text-fill-color:#ebebeb !important; }
+  </style>
+  <script>
+    (function() {
+      var saved = localStorage.getItem('backrooms_theme');
+      var dark;
+      if (saved === 'dark') dark = true;
+      else if (saved === 'light') dark = false;
+      else dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    })();
+  </script>
+</head>
+<body>
+
+  <nav id="navbar" class="visible scrolled">
+    <button class="mobile-avatar-btn" id="mobileAvatarBtn" style="display:none" aria-label="Menú de perfil">
+      <img class="mobile-avatar-img" id="mobileAvatarImg" src="" alt="Perfil" />
+    </button>
+    <a class="logo" href="backrooms.html">
+      <svg class="logo-icon" viewBox="0 0 502.44 474.82" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M240.58,272.76 L6.03,361.72 L4.13,4.13 L240.85,58.45 L240.58,273.05" fill="rgba(255,255,255,0.6)" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M258.43,275.12 L489.83,354.2 L486.45,4.13 L257.83,57.25 L258.18,274.07" fill="rgba(255,255,255,0.85)" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M8.13,374.35 L244.09,470.69 L498.32,372.02 L249.34,294.12 L7.92,374.42" fill="white" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M330.28,109.1 C337.43,123.56 350.23,222.29 344.45,238.32 C386.89,228.7 435.29,201.38 441.06,179.17 C447.83,168.06 443.08,151.62 439.93,140.23 C433.92,127.61 422.72,121.78 408.67,119.7 C437.21,78.1 399.59,52.43 357.89,64.28 C320.61,75.45 273.63,146.62 309.82,122.67 L330.28,109.1 Z" fill="none" stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M364.03,121.64 C363.24,121.64 362.28,120.72 361.91,119.59 C361.55,118.47 360.4,113.24 359.36,107.98 C358.33,102.71 357.73,98.25 358.03,98.04 C358.34,97.84 360.69,96.36 363.25,94.75 C365.88,93.11 371.05,91.83 375.08,91.83 C379.03,91.83 383.02,92.31 383.96,92.89 C384.92,93.48 385.21,95.89 384.62,98.36 C384.04,100.79 382.53,104.82 381.27,107.32 C380.01,109.82 375.94,114.06 372.23,116.75 C368.52,119.44 364.83,121.64 364.03,121.64 Z" fill="white"/>
+        <path d="M390.68,184.66 L379.25,190.67 L377.66,184.46 C376.79,181.05 375.21,173.96 374.16,168.69 C373.11,163.43 372.5,158.91 372.8,158.64 C373.11,158.37 376.61,156.51 380.58,154.51 C384.56,152.5 390.71,149.84 394.25,148.59 L400.7,146.31 L405.14,148.61 C407.58,149.87 410.57,152.76 411.78,155.02 C413.04,157.37 413.53,160.94 412.93,163.33 C412.35,165.64 409.68,170.04 406.99,173.1 C404.3,176.16 396.96,181.36 390.68,184.66 Z" fill="white"/>
+      </svg>
+      <span class="logo-text">BACKROOMS</span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+      <span class="ham-line"></span><span class="ham-line"></span><span class="ham-line"></span>
+      <img class="ham-avatar" id="hamAvatar" src="" alt="" style="display:none" />
+    </button>
+    <div class="nav-right-group">
+      <div class="nav-links">
+        <a href="backrooms.html">Inicio</a>
+        <a href="backrooms.html#catalogo">Catálogo</a>
+        <a href="#">Contacto</a>
+      </div>
+      <div class="nav-auth" id="navAuth">
+        <button class="btn-auth" id="btnLogin">Iniciar sesión</button>
+        <div class="user-menu-wrap" id="userMenuWrap" style="display:none">
+          <button class="btn-user" id="btnUserMenu">
+            <img class="btn-user-avatar" id="userAvatar" src="" alt="" />
+            <span class="btn-user-name" id="userDisplayName"></span>
+          </button>
+          <div class="user-dropdown" id="userDropdown">
+            <div class="user-dropdown-header">
+              <strong id="dropdownName"></strong>
+              <span id="dropdownEmail"></span>
+            </div>
+            <a class="user-dropdown-item" href="perfil.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Mi perfil
+            </a>
+            <a class="user-dropdown-item" href="guardados.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Guardados
+            </a>
+            <button class="user-dropdown-item danger" id="btnLogout">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="fullmenu" id="fullMenu" role="dialog" aria-modal="true">
+    <button class="fullmenu-close" id="fullMenuClose">✕</button>
+    <div class="fullmenu-left">
+      <a class="drawer-profile" id="drawerProfile" href="perfil.html" style="display:none">
+        <img class="drawer-avatar" id="drawerAvatar" src="" alt="Avatar" />
+        <div class="drawer-user-info">
+          <span class="drawer-username" id="drawerUsername">—</span>
+          <span class="drawer-email" id="drawerEmail">—</span>
+        </div>
+      </a>
+      <div class="drawer-account-links" id="drawerAccountLinks" style="display:none">
+        <a class="drawer-account-link" href="perfil.html">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Mi perfil
+        </a>
+        <a class="drawer-account-link" href="guardados.html">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Guardados
+        </a>
+      </div>
+      <div class="drawer-divider"></div>
+      <ul>
+        <li><a href="backrooms.html">Inicio</a></li>
+        <li><a href="backrooms.html#catalogo">Catálogo</a></li>
+        <li><a href="#">Contacto</a></li>
+      </ul>
+      <div class="drawer-divider"></div>
+      <button class="drawer-signout" id="drawerSignout" style="display:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesión
+      </button>
+      <button class="drawer-login" id="drawerLogin" style="display:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>Iniciar sesión
+      </button>
+    </div>
+  </div>
+  <div class="fullmenu-overlay" id="fullMenuOverlay"></div>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-header"><span id="modalHeading">¡Bienvenido de vuelta!</span></div>
+      <div class="modal-tabs">
+        <button class="tab active" data-tab="login">Iniciar sesión</button>
+        <button class="tab" data-tab="register">Registrarse</button>
+      </div>
+      <div class="tab-content active" id="tabLogin">
+        <input type="email" id="loginEmail" placeholder="Correo electrónico" />
+        <input type="password" id="loginPassword" placeholder="Contraseña" />
+        <button class="btn-submit" id="btnDoLogin">Entrar</button>
+        <p class="auth-error" id="loginError"></p>
+      </div>
+      <div class="tab-content" id="tabRegister">
+        <input type="text" id="regUsername" placeholder="Nombre de usuario" />
+        <input type="email" id="regEmail" placeholder="Correo electrónico" />
+        <div class="password-wrap">
+          <input type="password" id="regPassword" placeholder="Contraseña (mín. 6 caracteres)" />
+          <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+          <span class="strength-label" id="strengthLabel"></span>
+        </div>
+        <button class="btn-submit" id="btnDoRegister">Crear cuenta</button>
+        <p class="auth-error" id="registerError"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PASAPORTE ══ -->
+  <div class="perfil-bg" id="perfilBg" data-theme="aero-latte">
+    <div class="perfil-layout">
+      <div class="passport-wrap">
+
+        <a class="passport-back" href="backrooms.html">← Regresar</a>
+
+        <div class="passport" id="passportCard">
+          <div class="passport-divider"></div>
+
+          <!-- IZQUIERDA -->
+          <div class="passport-left" id="passportLeft">
+            <div class="passport-header-block">
+              <span class="passport-brand">Backrooms</span>
+              <span class="passport-type">Tarjeta de miembro</span>
+            </div>
+            <div class="passport-avatar-wrap">
+              <img class="passport-avatar" id="perfilAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3C/svg%3E" alt="Foto de perfil" />
+              <label class="passport-edit-badge" id="avatarEditBtn" style="display:none" title="Cambiar foto">✎
+                <input type="file" id="avatarInput" accept="image/*" style="display:none" />
+              </label>
+            </div>
+            <div class="passport-identity">
+              <div class="passport-username" id="perfilUsername">—</div>
+              <div class="passport-bio" id="perfilBioDisplay">—</div>
+            </div>
+            <div class="passport-tags-section" id="passportTagsSection">
+              <span class="passport-tags-label">Etiquetas</span>
+              <div class="passport-tags-list" id="passportTagsList">
+                <span class="passport-tag empty">Sin etiquetas</span>
+              </div>
+              <button class="passport-tags-toggle" id="passportTagsToggle" style="display:none">Ver más ▾</button>
+            </div>
+            <div class="passport-stickers-section" id="passportStickersSection">
+              <span class="passport-tags-label">Calcomanías</span>
+              <div class="passport-badges-inline" id="passportBadges"></div>
+            </div>
+          </div>
+
+          <!-- DERECHA -->
+          <div class="passport-right" id="passportRight">
+            <div class="passport-login-prompt" id="perfilLoginPrompt" style="display:none">
+              <p>Inicia sesión para ver y editar tu tarjeta.</p>
+              <button class="btn-passport-login" onclick="openModal?.()">Iniciar sesión</button>
+            </div>
+
+            <div class="passport-nav" id="passportNav" style="display:none">
+              <button class="passport-nav-btn active" data-page="bio">Sobre mí</button>
+              <button class="passport-nav-btn" data-page="settings">Ajustes</button>
+            </div>
+
+            <div class="passport-pages" id="passportPages" style="display:none">
+
+              <!-- BIO -->
+              <div class="passport-page active" id="page-bio">
+                <div class="bio-display" id="bioDisplay"><span class="bio-empty">Sin bio aún.</span></div>
+                <button class="btn-edit-inline" id="btnEditBio" style="display:none">Editar bio</button>
+                <div class="bio-edit-wrap" id="bioEditWrap">
+                  <textarea id="bioInput" placeholder="Cuéntanos algo sobre ti..." rows="3"></textarea>
+                  <div class="bio-edit-actions">
+                    <button class="btn-cancel-bio" id="btnCancelBio">Cancelar</button>
+                    <button class="btn-save-bio" id="btnSaveBio">Guardar</button>
+                  </div>
+                  <span class="settings-save-msg" id="bioMsg"></span>
+                </div>
+              </div>
+
+              <!-- AJUSTES -->
+              <div class="passport-page" id="page-settings">
+
+                <div class="settings-group">
+                  <div class="page-section-title">Personalizar tarjeta</div>
+
+                  <div class="passport-customize-sub">
+                    <div class="passport-customize-sub-label">Apariencia</div>
+                    <div class="dark-mode-row" style="margin-top:6px">
+                      <div class="dark-mode-info">
+                        <label class="dark-mode-label" for="themeSelect">Tema de interfaz</label>
+                        <span class="dark-mode-desc">Elige cómo se ve la interfaz</span>
+                      </div>
+                      <select id="themeSelect" class="theme-select">
+                        <option value="system">Sistema</option>
+                        <option value="light">Claro</option>
+                        <option value="dark">Oscuro</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="passport-customize-sub" style="margin-top:16px">
+                    <div class="passport-customize-sub-label">Fondo de página</div>
+                    <div class="theme-bg-options" id="themeBgOptions" style="margin-top:6px">
+                      <div class="theme-bg-swatch active" data-bg="aero-latte"     title="Latte"></div>
+                      <div class="theme-bg-swatch"        data-bg="aero-beige"     title="Beige"></div>
+                      <div class="theme-bg-swatch"        data-bg="aero-terracota" title="Terracota"></div>
+                      <div class="theme-bg-swatch"        data-bg="aero-pizarra"   title="Pizarra"></div>
+                      <div class="theme-bg-swatch"        data-bg="aero-musgo"     title="Musgo"></div>
+                      <div class="theme-bg-swatch"        data-bg="aero-lavanda"   title="Lavanda"></div>
+                      <img class="theme-custom-thumb" id="customBgThumb" src="" alt="Fondo personalizado" />
+                      <label class="theme-bg-upload-btn" id="customBgUploadBtn" title="Subir imagen propia">+
+                        <input type="file" id="customBgInput" accept="image/*" />
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="passport-customize-sub" style="margin-top:16px">
+                    <div class="passport-customize-sub-label">Color de acento</div>
+                    <div class="theme-accent-row" style="margin-top:6px">
+                      <div class="theme-accent-options" id="themeAccentOptions">
+                        <div class="theme-accent-swatch active" data-accent="#5c3d1e" style="background:#5c3d1e" title="Café oscuro"></div>
+                        <div class="theme-accent-swatch" data-accent="#8b5e35" style="background:#8b5e35" title="Café medio"></div>
+                        <div class="theme-accent-swatch" data-accent="#b88a5e" style="background:#b88a5e" title="Caramelo"></div>
+                        <div class="theme-accent-swatch" data-accent="#2a1a0e" style="background:#2a1a0e" title="Tinta"></div>
+                        <div class="theme-accent-swatch" data-accent="#6b4f3a" style="background:#6b4f3a" title="Madera"></div>
+                        <div class="theme-accent-swatch" data-accent="#3d6b4f" style="background:#3d6b4f" title="Musgo"></div>
+                        <div class="theme-accent-swatch" data-accent="#4f3d6b" style="background:#4f3d6b" title="Lavanda oscura"></div>
+                        <div class="theme-accent-swatch" data-accent="#6b3d3d" style="background:#6b3d3d" title="Vino"></div>
+                      </div>
+                    </div>
+                    <span class="settings-save-msg" id="themeMsg"></span>
+                  </div>
+
+                  <div class="passport-customize-sub" style="margin-top:16px">
+                    <div class="passport-customize-sub-label">Etiquetas</div>
+                    <div class="tag-picker" id="tagPicker" style="margin-top:6px"></div>
+                    <span class="tag-picker-hint">Elige hasta 3 etiquetas que te describan.</span>
+                    <button class="btn-settings-save" id="btnSaveTags" style="margin-top:10px">Guardar etiquetas</button>
+                    <span class="settings-save-msg" id="tagsMsg"></span>
+                  </div>
+
+                  <div class="passport-customize-sub" style="margin-top:16px">
+                    <div class="passport-customize-sub-label">Calcomanías</div>
+                    <div class="badge-picker" id="badgePicker" style="margin-top:6px"></div>
+                    <span class="badge-picker-hint">Elige hasta 3 para mostrar en tu tarjeta.</span>
+                    <button class="btn-settings-save" id="btnSaveBadges" style="margin-top:10px">Guardar calcomanías</button>
+                    <span class="settings-save-msg" id="badgesMsg"></span>
+                  </div>
+                </div>
+
+                <div class="settings-group">
+                  <div class="page-section-title">Nombre de usuario</div>
+                  <div class="settings-input-wrap">
+                    <input class="settings-input" type="text" id="usernameInput" placeholder="Nuevo nombre de usuario" />
+                    <span class="settings-status" id="usernameStatus"></span>
+                  </div>
+                  <div class="settings-hint">Solo letras, números y guiones bajos. Mín. 3 caracteres.</div>
+                  <button class="btn-settings-save" id="btnSaveUsername" disabled>Cambiar nombre</button>
+                  <span class="settings-save-msg" id="usernameMsg"></span>
+                </div>
+
+                <div class="settings-group">
+                  <div class="page-section-title">Correo electrónico</div>
+                  <input class="settings-input" type="email" id="emailInput" placeholder="Nuevo correo electrónico" />
+                  <button class="btn-settings-save" id="btnSaveEmail">Cambiar correo</button>
+                  <span class="settings-save-msg" id="emailMsg"></span>
+                </div>
+
+                <div class="settings-group">
+                  <div class="page-section-title">Contraseña</div>
+                  <input class="settings-input" type="password" id="newPassword" placeholder="Nueva contraseña (mín. 6 caracteres)" style="margin-bottom:6px" />
+                  <div class="strength-bar"><div class="strength-fill" id="pwFill"></div></div>
+                  <span class="strength-label" id="pwLabel"></span>
+                  <input class="settings-input" type="password" id="confirmPassword" placeholder="Confirmar nueva contraseña" style="margin-top:8px" />
+                  <button class="btn-settings-save" id="btnSavePassword">Cambiar contraseña</button>
+                  <span class="settings-save-msg" id="passwordMsg"></span>
+                </div>
+              </div>
+
+            </div><!-- /passport-pages -->
+
+            <div class="passport-sidebar-info" id="passportSidebarInfo" style="display:none">
+              <div class="passport-joined" id="perfilJoined"></div>
+              <div class="passport-stats">
+                <div class="passport-stat">
+                  <div class="passport-stat-value" id="statGuardados">—</div>
+                  <div class="passport-stat-label">Guardados</div>
+                </div>
+              </div>
+              <div class="passport-member">
+                <span class="passport-member-label">Miembro desde</span>
+                <span class="passport-member-number" id="memberNumber">—</span>
+              </div>
+            </div>
+
+          </div><!-- /passport-right -->
+
+          <div class="passport-footer">
+            <span class="passport-footer-brand">Backrooms · Papelería</span>
+            <div class="passport-barcode" id="passportBarcode"></div>
+          </div>
+        </div><!-- /passport -->
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="backrooms.js"></script>
+  <script>
+  /* ── DATOS ── */
+  const TAGS_DISPONIBLES = ['📚 Lector','✏️ Escritor','🎨 Artista','📐 Diseñador','🖊️ Caligrafía','📓 Coleccionista','✂️ Manualidades','🎓 Estudiante','👩‍🏫 Docente','🛍️ Comprador frecuente'];
+  const BADGES_DISPONIBLES = ['📚','✏️','🎨','📐','🖊️','📓','✂️','🌿','🦁','⭐','🔖','🎯'];
+
+  let currentUser    = null;
+  let currentProfile = null;
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    /* Nav / drawer / auth — mismo patrón que backrooms.js */
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
+
+    const hamburger = document.getElementById('hamburger');
+    const fullMenu  = document.getElementById('fullMenu');
+    const overlay   = document.getElementById('fullMenuOverlay');
+    const openD = () => { fullMenu.classList.add('open'); overlay.classList.add('visible'); document.body.style.overflow = 'hidden'; };
+    const closeD= () => { fullMenu.classList.remove('open'); overlay.classList.remove('visible'); document.body.style.overflow = ''; };
+    hamburger?.addEventListener('click', openD);
+    document.getElementById('fullMenuClose')?.addEventListener('click', closeD);
+    overlay?.addEventListener('click', closeD);
+    document.getElementById('drawerSignout')?.addEventListener('click', () => { if (sb) sb.auth.signOut(); closeD(); });
+    document.getElementById('drawerLogin')?.addEventListener('click', () => { closeD(); setTimeout(() => openModal?.(), 150); });
+    document.getElementById('btnLogin')?.addEventListener('click', () => openModal?.());
+    initAuthModal();
+    initUserDropdown();
+
+    /* Código de barras decorativo */
+    const bc = document.getElementById('passportBarcode');
+    if (bc) {
+      [3,1,2,1,3,2,1,2,1,3,1,2,3,1,2,1,3,2,1,1,2,3,1,2].forEach((w,i) => {
+        const s = document.createElement('span');
+        s.style.height = (i%4===0?'100%':i%3===0?'70%':'85%');
+        s.style.width  = w+'px';
+        bc.appendChild(s);
+      });
+    }
+
+    /* Auth */
+    if (!sb) return;
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) await onLogin(session.user);
+    else onLogout();
+
+    sb.auth.onAuthStateChange((_e, s) => { if (s) onLogin(s.user); else onLogout(); });
+
+    /* Tabs */
+    document.querySelectorAll('.passport-nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.passport-nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.passport-page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-'+btn.dataset.page)?.classList.add('active');
+        const sidebar = document.getElementById('passportSidebarInfo');
+        if (sidebar) sidebar.style.display = btn.dataset.page === 'bio' ? '' : 'none';
+      });
+    });
+
+    /* Bio */
+    const btnEditBio  = document.getElementById('btnEditBio');
+    const bioEditWrap = document.getElementById('bioEditWrap');
+    const btnCancelBio= document.getElementById('btnCancelBio');
+    const btnSaveBio  = document.getElementById('btnSaveBio');
+    btnEditBio?.addEventListener('click', () => {
+      document.getElementById('bioInput').value = currentProfile?.bio || '';
+      bioEditWrap.classList.add('open');
+      btnEditBio.style.display = 'none';
+    });
+    btnCancelBio?.addEventListener('click', () => { bioEditWrap.classList.remove('open'); btnEditBio.style.display = 'inline-block'; });
+    btnSaveBio?.addEventListener('click', async () => {
+      const bio = document.getElementById('bioInput').value.trim();
+      const msg = document.getElementById('bioMsg');
+      const { error } = await sb.from('profiles').update({ bio }).eq('id', currentUser.id);
+      if (error) { showMsg(msg,'Error al guardar.',true); return; }
+      if (currentProfile) currentProfile.bio = bio;
+      renderBio(bio);
+      document.getElementById('perfilBioDisplay').textContent = bio || '—';
+      bioEditWrap.classList.remove('open');
+      btnEditBio.style.display = 'inline-block';
+      showMsg(msg,'¡Bio guardada!',false);
+    });
+
+    /* Avatar */
+    document.getElementById('avatarInput')?.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file || !currentUser) return;
+      const ext  = file.name.split('.').pop();
+      const path = `avatars/${currentUser.id}.${ext}`;
+      const { error } = await sb.storage.from('avatars').upload(path, file, { upsert:true });
+      if (error) return;
+      const { data } = sb.storage.from('avatars').getPublicUrl(path);
+      await sb.from('profiles').update({ avatar_url: data.publicUrl }).eq('id', currentUser.id);
+      document.getElementById('perfilAvatar').src = data.publicUrl;
+    });
+
+    /* Username */
+    let usernameTimer;
+    const usernameInput  = document.getElementById('usernameInput');
+    const usernameStatus = document.getElementById('usernameStatus');
+    const btnSaveUser    = document.getElementById('btnSaveUsername');
+    usernameInput?.addEventListener('input', () => {
+      clearTimeout(usernameTimer);
+      const val = usernameInput.value.trim();
+      usernameStatus.textContent = ''; btnSaveUser.disabled = true;
+      if (val.length < 3) return;
+      if (!/^[a-zA-Z0-9_]+$/.test(val)) { usernameStatus.textContent = '✗'; usernameStatus.style.color = '#c62828'; return; }
+      if (val === currentProfile?.username) { usernameStatus.textContent = '✓'; usernameStatus.style.color = 'var(--passport-accent,#5c3d1e)'; btnSaveUser.disabled = false; return; }
+      usernameStatus.textContent = '…'; usernameStatus.style.color = '#999';
+      usernameTimer = setTimeout(async () => {
+        const { data } = await sb.from('profiles').select('id').eq('username', val).single();
+        if (data) { usernameStatus.textContent = '✗ Ya en uso'; usernameStatus.style.color = '#c62828'; btnSaveUser.disabled = true; }
+        else       { usernameStatus.textContent = '✓ Disponible'; usernameStatus.style.color = 'var(--passport-accent,#5c3d1e)'; btnSaveUser.disabled = false; }
+      }, 500);
+    });
+    btnSaveUser?.addEventListener('click', async () => {
+      const val = usernameInput.value.trim();
+      const msg = document.getElementById('usernameMsg');
+      if (!val || val.length < 3) return;
+      const { error } = await sb.from('profiles').update({ username: val }).eq('id', currentUser.id);
+      if (error) { showMsg(msg,'Error al cambiar nombre.',true); return; }
+      await sb.auth.updateUser({ data: { username: val } });
+      if (currentProfile) currentProfile.username = val;
+      document.getElementById('perfilUsername').textContent = val.toUpperCase();
+      showMsg(msg,'¡Nombre actualizado!',false);
+    });
+
+    /* Email */
+    document.getElementById('btnSaveEmail')?.addEventListener('click', async () => {
+      const email = document.getElementById('emailInput').value.trim();
+      const msg   = document.getElementById('emailMsg');
+      if (!email) return;
+      const { error } = await sb.auth.updateUser({ email });
+      showMsg(msg, error ? 'Error al actualizar.' : 'Revisa tu correo para confirmar el cambio.', !!error);
+    });
+
+    /* Contraseña */
+    const pwInput = document.getElementById('newPassword');
+    const pwFill  = document.getElementById('pwFill');
+    const pwLabel = document.getElementById('pwLabel');
+    const levels  = [{label:'Muy débil',color:'#ef4444',pct:15},{label:'Débil',color:'#f97316',pct:35},{label:'Regular',color:'#eab308',pct:55},{label:'Buena',color:'#84cc16',pct:75},{label:'Muy fuerte',color:'#5c3d1e',pct:100}];
+    function measurePw(pw){ let s=0; if(pw.length>=6)s++; if(pw.length>=10)s++; if(/[A-Z]/.test(pw))s++; if(/[0-9]/.test(pw))s++; if(/[^A-Za-z0-9]/.test(pw))s++; return Math.min(s,4); }
+    pwInput?.addEventListener('input', () => {
+      const pw = pwInput.value;
+      if (!pw) { pwFill.style.width='0'; pwLabel.textContent=''; return; }
+      const lv = levels[measurePw(pw)];
+      pwFill.style.width=lv.pct+'%'; pwFill.style.background=lv.color;
+      pwLabel.style.color=lv.color; pwLabel.textContent=lv.label;
+    });
+    document.getElementById('btnSavePassword')?.addEventListener('click', async () => {
+      const pw1 = document.getElementById('newPassword').value;
+      const pw2 = document.getElementById('confirmPassword').value;
+      const msg = document.getElementById('passwordMsg');
+      if (pw1!==pw2) { showMsg(msg,'Las contraseñas no coinciden.',true); return; }
+      if (pw1.length<6) { showMsg(msg,'Mínimo 6 caracteres.',true); return; }
+      const { error } = await sb.auth.updateUser({ password: pw1 });
+      showMsg(msg, error ? 'Error al cambiar contraseña.' : '¡Contraseña actualizada!', !!error);
+    });
+
+    /* Tema interfaz */
+    const themeSelect = document.getElementById('themeSelect');
+    const saved = localStorage.getItem('backrooms_theme') || 'system';
+    themeSelect.value = saved;
+    themeSelect?.addEventListener('change', () => {
+      const val = themeSelect.value;
+      localStorage.setItem('backrooms_theme', val);
+      const dark = val==='dark' || (val==='system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    });
+
+    /* Fondo de página */
+    document.querySelectorAll('.theme-bg-swatch').forEach(sw => {
+      sw.addEventListener('click', async () => {
+        document.querySelectorAll('.theme-bg-swatch').forEach(s => s.classList.remove('active'));
+        sw.classList.add('active');
+        const bg = sw.dataset.bg;
+        document.getElementById('perfilBg').setAttribute('data-theme', bg);
+        await savePreference('bg_theme', bg);
+        showMsg(document.getElementById('themeMsg'),'¡Fondo guardado!',false);
+      });
+    });
+
+    /* Fondo personalizado */
+    document.getElementById('customBgInput')?.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async (ev) => {
+        const url = ev.target.result;
+        document.getElementById('perfilBg').style.cssText = `--custom-bg-image: url('${url}')`;
+        document.getElementById('perfilBg').setAttribute('data-theme','custom');
+        document.getElementById('customBgThumb').src = url;
+        document.getElementById('customBgThumb').classList.add('visible');
+        document.getElementById('customBgUploadBtn').classList.add('active');
+        document.querySelectorAll('.theme-bg-swatch').forEach(s => s.classList.remove('active'));
+        await savePreference('bg_theme','custom');
+        await savePreference('bg_custom_url', url);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    /* Color de acento */
+    document.querySelectorAll('.theme-accent-swatch').forEach(sw => {
+      sw.addEventListener('click', async () => {
+        document.querySelectorAll('.theme-accent-swatch').forEach(s => s.classList.remove('active'));
+        sw.classList.add('active');
+        const color = sw.dataset.accent;
+        applyAccent(color);
+        await savePreference('accent_color', color);
+        showMsg(document.getElementById('themeMsg'),'¡Color guardado!',false);
+      });
+    });
+
+    /* Tags */
+    renderTagPicker();
+    document.getElementById('btnSaveTags')?.addEventListener('click', async () => {
+      const selected = [...document.querySelectorAll('.tag-option.selected')].map(el => el.dataset.tag);
+      const msg = document.getElementById('tagsMsg');
+      await sb.from('profiles').update({ tags: selected }).eq('id', currentUser.id);
+      if (currentProfile) currentProfile.tags = selected;
+      renderTags(selected);
+      showMsg(msg,'¡Etiquetas guardadas!',false);
+    });
+
+    /* Badges */
+    renderBadgePicker();
+    document.getElementById('btnSaveBadges')?.addEventListener('click', async () => {
+      const selected = [...document.querySelectorAll('.badge-option.selected')].map(el => el.dataset.badge);
+      const msg = document.getElementById('badgesMsg');
+      await sb.from('profiles').update({ badges: selected }).eq('id', currentUser.id);
+      if (currentProfile) currentProfile.badges = selected;
+      renderBadges(selected);
+      showMsg(msg,'¡Calcomanías guardadas!',false);
+    });
+  });
+
+  /* ── HELPERS ── */
+  function showMsg(el, text, isErr) {
+    if (!el) return;
+    el.textContent = text;
+    el.className = 'settings-save-msg ' + (isErr ? 'err' : 'ok');
+    setTimeout(() => { if (el) el.textContent = ''; }, 3000);
+  }
+
+  function applyAccent(color) {
+    document.getElementById('passportLeft').style.setProperty('--passport-accent', color);
+    document.getElementById('passportLeft').style.background = color;
+    document.querySelectorAll('.passport-stat,.passport-member').forEach(el => el.style.background = color);
+    document.querySelectorAll('.passport-nav-btn.active').forEach(el => el.style.color = color);
+  }
+
+  async function savePreference(key, value) {
+    if (!currentUser) return;
+    const prefs = { ...(currentProfile?.preferences || {}), [key]: value };
+    await sb.from('profiles').update({ preferences: prefs }).eq('id', currentUser.id);
+    if (currentProfile) currentProfile.preferences = prefs;
+  }
+
+  function renderBio(bio) {
+    const el = document.getElementById('bioDisplay');
+    el.innerHTML = bio ? bio.replace(/\n/g,'<br>') : '<span class="bio-empty">Sin bio aún.</span>';
+  }
+
+  function renderTags(tags) {
+    const list = document.getElementById('passportTagsList');
+    if (!list) return;
+    if (!tags || !tags.length) { list.innerHTML = '<span class="passport-tag empty">Sin etiquetas</span>'; return; }
+    list.innerHTML = tags.map(t => `<span class="passport-tag">${t}</span>`).join('');
+    document.querySelectorAll('.tag-option').forEach(opt => {
+      opt.classList.toggle('selected', tags.includes(opt.dataset.tag));
+    });
+  }
+
+  function renderBadges(badges) {
+    const wrap = document.getElementById('passportBadges');
+    if (!wrap) return;
+    wrap.innerHTML = (badges||[]).map(b => `<div class="passport-badge-item">${b}</div>`).join('');
+    document.querySelectorAll('.badge-option').forEach(opt => {
+      opt.classList.toggle('selected', (badges||[]).includes(opt.dataset.badge));
+    });
+  }
+
+  function renderTagPicker() {
+    const picker = document.getElementById('tagPicker');
+    if (!picker) return;
+    picker.innerHTML = TAGS_DISPONIBLES.map(t =>
+      `<button class="tag-option" data-tag="${t}">${t}</button>`
+    ).join('');
+    picker.querySelectorAll('.tag-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sel = picker.querySelectorAll('.selected').length;
+        if (!btn.classList.contains('selected') && sel >= 3) return;
+        btn.classList.toggle('selected');
+        picker.querySelectorAll('.tag-option').forEach(b => {
+          b.classList.toggle('disabled', !b.classList.contains('selected') && picker.querySelectorAll('.selected').length >= 3);
+        });
+      });
+    });
+  }
+
+  function renderBadgePicker() {
+    const picker = document.getElementById('badgePicker');
+    if (!picker) return;
+    picker.innerHTML = BADGES_DISPONIBLES.map(b =>
+      `<button class="badge-option" data-badge="${b}">${b}</button>`
+    ).join('');
+    picker.querySelectorAll('.badge-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sel = picker.querySelectorAll('.selected').length;
+        if (!btn.classList.contains('selected') && sel >= 3) return;
+        btn.classList.toggle('selected');
+      });
+    });
+  }
+
+  async function onLogin(user) {
+    currentUser = user;
+    document.getElementById('perfilLoginPrompt').style.display = 'none';
+    document.getElementById('passportNav').style.display = '';
+    document.getElementById('passportPages').style.display = '';
+    document.getElementById('passportSidebarInfo').style.display = '';
+    document.getElementById('avatarEditBtn').style.display = 'flex';
+    document.getElementById('btnEditBio').style.display = 'inline-block';
+
+    const username = user.user_metadata?.username || user.email.split('@')[0];
+    document.getElementById('perfilUsername').textContent = username.toUpperCase();
+    const joined = new Date(user.created_at);
+    document.getElementById('perfilJoined').textContent =
+      'Miembro desde ' + joined.toLocaleDateString('es-MX',{year:'numeric',month:'long'});
+    document.getElementById('memberNumber').textContent =
+      joined.toLocaleDateString('es-MX',{year:'numeric',month:'long'});
+
+    const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=d4b896&color=2a1a0e&size=140`;
+    document.getElementById('perfilAvatar').src = fallback;
+
+    try {
+      const { data: profile } = await sb.from('profiles').select('*').eq('id', user.id).single();
+      currentProfile = profile;
+      if (profile) {
+        renderBio(profile.bio);
+        document.getElementById('perfilBioDisplay').textContent = profile.bio || '—';
+        if (profile.avatar_url) document.getElementById('perfilAvatar').src = profile.avatar_url;
+        renderTags(profile.tags || []);
+        renderBadges(profile.badges || []);
+
+        /* Preferencias guardadas */
+        const prefs = profile.preferences || {};
+        if (prefs.bg_theme) {
+          document.getElementById('perfilBg').setAttribute('data-theme', prefs.bg_theme);
+          document.querySelectorAll('.theme-bg-swatch').forEach(s => s.classList.toggle('active', s.dataset.bg === prefs.bg_theme));
+          if (prefs.bg_theme === 'custom' && prefs.bg_custom_url) {
+            document.getElementById('perfilBg').style.cssText = `--custom-bg-image:url('${prefs.bg_custom_url}')`;
+            document.getElementById('customBgThumb').src = prefs.bg_custom_url;
+            document.getElementById('customBgThumb').classList.add('visible');
+          }
+        }
+        if (prefs.accent_color) {
+          applyAccent(prefs.accent_color);
+          document.querySelectorAll('.theme-accent-swatch').forEach(s => s.classList.toggle('active', s.dataset.accent === prefs.accent_color));
+        }
+
+        /* Guardados count */
+        const { count } = await sb.from('guardados').select('id',{count:'exact',head:true}).eq('user_id', user.id);
+        document.getElementById('statGuardados').textContent = count ?? 0;
+      }
+    } catch(_) {
+      document.getElementById('perfilAvatar').src = fallback;
+    }
+  }
+
+  function onLogout() {
+    currentUser = currentProfile = null;
+    document.getElementById('perfilLoginPrompt').style.display = '';
+    document.getElementById('passportNav').style.display       = 'none';
+    document.getElementById('passportPages').style.display     = 'none';
+    document.getElementById('passportSidebarInfo').style.display = 'none';
+    document.getElementById('avatarEditBtn').style.display = 'none';
+    document.getElementById('perfilUsername').textContent = '—';
+    document.getElementById('perfilBioDisplay').textContent = '—';
+  }
+  </script>
+</body>
+</html>

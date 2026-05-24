@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guardados — Backrooms</title>
+  <link rel="stylesheet" href="backrooms.css" />
+  <style>
+    .guardados-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: calc(var(--nav-height) + 48px) 28px 80px;
+    }
+
+    .guardados-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .guardados-header h1 {
+      font-family: 'Collidge Rounded', serif;
+      font-size: 2.2rem;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .guardados-count {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    /* Estado vacío */
+    .guardados-empty {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 80px 20px;
+      text-align: center;
+    }
+    .guardados-empty.visible { display: flex; }
+
+    .guardados-empty-icon {
+      font-size: 3.5rem;
+      opacity: 0.35;
+    }
+    .guardados-empty h2 {
+      font-family: 'Collidge Rounded', serif;
+      font-size: 1.4rem;
+      color: var(--ink);
+      text-transform: uppercase;
+    }
+    .guardados-empty p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.93rem;
+      color: var(--text-light);
+      max-width: 320px;
+    }
+
+    /* Sin sesión */
+    .guardados-no-session {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 80px 20px;
+      text-align: center;
+    }
+    .guardados-no-session.visible { display: flex; }
+    .guardados-no-session h2 {
+      font-family: 'Collidge Rounded', serif;
+      font-size: 1.4rem;
+      color: var(--ink);
+      text-transform: uppercase;
+    }
+    .guardados-no-session p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.93rem;
+      color: var(--text-light);
+    }
+
+    /* Grid masonry-like */
+    .guardados-grid {
+      columns: 4;
+      column-gap: 16px;
+    }
+
+    @media (max-width: 1024px) { .guardados-grid { columns: 3; } }
+    @media (max-width: 680px)  { .guardados-grid { columns: 2; } }
+    @media (max-width: 420px)  { .guardados-grid { columns: 1; } }
+
+    .guardado-card {
+      break-inside: avoid;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.22s, box-shadow 0.22s;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    .guardado-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 36px rgba(92,61,30,0.14);
+    }
+
+    .guardado-img {
+      width: 100%;
+      display: block;
+      background: var(--beige-light);
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+    }
+
+    .guardado-body {
+      padding: 12px 14px 14px;
+    }
+
+    .guardado-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .guardado-category {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .guardado-price {
+      font-family: 'Collidge Rounded', serif;
+      font-size: 1rem;
+      color: var(--brown);
+      margin-top: 8px;
+    }
+
+    /* Botón quitar guardado */
+    .btn-unsave {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(6px);
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--brown);
+      opacity: 0;
+      transition: opacity 0.2s, background 0.2s, transform 0.2s;
+      z-index: 2;
+    }
+    .guardado-card:hover .btn-unsave { opacity: 1; }
+    .btn-unsave:hover { background: white; transform: scale(1.1); color: #b91c1c; }
+
+    /* Skeletons */
+    .guard-skel {
+      break-inside: avoid;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .guard-skel-img {
+      height: 160px;
+      background: linear-gradient(90deg, var(--skel-base) 25%, var(--skel-shine) 50%, var(--skel-base) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+    .guard-skel-line {
+      height: 12px;
+      border-radius: 6px;
+      margin: 14px 14px 6px;
+      background: linear-gradient(90deg, var(--skel-base) 25%, var(--skel-shine) 50%, var(--skel-base) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+    .guard-skel-line.short { width: 55%; margin-bottom: 14px; }
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to   { background-position: -200% 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar" class="visible scrolled">
+    <button class="mobile-avatar-btn" id="mobileAvatarBtn" style="display:none" aria-label="Menú de perfil">
+      <img class="mobile-avatar-img" id="mobileAvatarImg" src="" alt="Perfil" />
+    </button>
+    <a class="logo" href="backrooms.html">
+      <svg class="logo-icon" viewBox="0 0 502.44 474.82" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M240.58,272.76 L6.03,361.72 L4.13,4.13 L240.85,58.45 L240.58,273.05" fill="rgba(255,255,255,0.6)" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M258.43,275.12 L489.83,354.2 L486.45,4.13 L257.83,57.25 L258.18,274.07" fill="rgba(255,255,255,0.85)" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M8.13,374.35 L244.09,470.69 L498.32,372.02 L249.34,294.12 L7.92,374.42" fill="white" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M330.28,109.1 C337.43,123.56 350.23,222.29 344.45,238.32 C386.89,228.7 435.29,201.38 441.06,179.17 C447.83,168.06 443.08,151.62 439.93,140.23 C433.92,127.61 422.72,121.78 408.67,119.7 C437.21,78.1 399.59,52.43 357.89,64.28 C320.61,75.45 273.63,146.62 309.82,122.67 L330.28,109.1 Z" fill="none" stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M364.03,121.64 C363.24,121.64 362.28,120.72 361.91,119.59 C361.55,118.47 360.4,113.24 359.36,107.98 C358.33,102.71 357.73,98.25 358.03,98.04 C358.34,97.84 360.69,96.36 363.25,94.75 C365.88,93.11 371.05,91.83 375.08,91.83 C379.03,91.83 383.02,92.31 383.96,92.89 C384.92,93.48 385.21,95.89 384.62,98.36 C384.04,100.79 382.53,104.82 381.27,107.32 C380.01,109.82 375.94,114.06 372.23,116.75 C368.52,119.44 364.83,121.64 364.03,121.64 Z" fill="white"/>
+        <path d="M390.68,184.66 L379.25,190.67 L377.66,184.46 C376.79,181.05 375.21,173.96 374.16,168.69 C373.11,163.43 372.5,158.91 372.8,158.64 C373.11,158.37 376.61,156.51 380.58,154.51 C384.56,152.5 390.71,149.84 394.25,148.59 L400.7,146.31 L405.14,148.61 C407.58,149.87 410.57,152.76 411.78,155.02 C413.04,157.37 413.53,160.94 412.93,163.33 C412.35,165.64 409.68,170.04 406.99,173.1 C404.3,176.16 396.96,181.36 390.68,184.66 Z" fill="white"/>
+      </svg>
+      <span class="logo-text">Backrooms</span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+      <span class="ham-line"></span><span class="ham-line"></span><span class="ham-line"></span>
+      <img class="ham-avatar" id="hamAvatar" src="" alt="" style="display:none" />
+    </button>
+    <div class="nav-right-group">
+      <div class="nav-links">
+        <a href="backrooms.html">Inicio</a>
+        <a href="backrooms.html#catalogo">Catálogo</a>
+        <a href="#">Contacto</a>
+      </div>
+      <div class="nav-auth" id="navAuth">
+        <button class="btn-auth" id="btnLogin">Iniciar sesión</button>
+        <div class="user-menu-wrap" id="userMenuWrap" style="display:none">
+          <button class="btn-user" id="btnUserMenu">
+            <img class="btn-user-avatar" id="userAvatar" src="" alt="" />
+            <span class="btn-user-name" id="userDisplayName"></span>
+          </button>
+          <div class="user-dropdown" id="userDropdown">
+            <div class="user-dropdown-header">
+              <strong id="dropdownName"></strong>
+              <span id="dropdownEmail"></span>
+            </div>
+            <a class="user-dropdown-item" href="perfil.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              Mi perfil
+            </a>
+            <a class="user-dropdown-item" href="guardados.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+              Guardados
+            </a>
+            <button class="user-dropdown-item danger" id="btnLogout">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- DRAWER -->
+  <div class="fullmenu" id="fullMenu" role="dialog" aria-modal="true">
+    <button class="fullmenu-close" id="fullMenuClose">✕</button>
+    <div class="fullmenu-left">
+      <a class="drawer-profile" id="drawerProfile" href="perfil.html" style="display:none">
+        <img class="drawer-avatar" id="drawerAvatar" src="" alt="Avatar" />
+        <div class="drawer-user-info">
+          <span class="drawer-username" id="drawerUsername">—</span>
+          <span class="drawer-email"    id="drawerEmail">—</span>
+        </div>
+      </a>
+      <div class="drawer-divider"></div>
+      <ul>
+        <li><a href="backrooms.html">Inicio</a></li>
+        <li><a href="backrooms.html#catalogo">Catálogo</a></li>
+        <li><a href="#">Contacto</a></li>
+      </ul>
+      <div class="drawer-divider"></div>
+      <button class="drawer-signout" id="drawerSignout" style="display:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Cerrar sesión
+      </button>
+      <button class="drawer-login" id="drawerLogin" style="display:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Iniciar sesión
+      </button>
+    </div>
+  </div>
+  <div class="fullmenu-overlay" id="fullMenuOverlay"></div>
+
+  <!-- MODAL AUTH -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" id="authModal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-header"><span id="modalHeading">¡Bienvenido de vuelta!</span></div>
+      <div class="modal-tabs">
+        <button class="tab active" data-tab="login">Iniciar sesión</button>
+        <button class="tab" data-tab="register">Registrarse</button>
+      </div>
+      <div class="tab-content active" id="tabLogin">
+        <input type="email" id="loginEmail" placeholder="Correo electrónico" />
+        <input type="password" id="loginPassword" placeholder="Contraseña" />
+        <button class="btn-submit" id="btnDoLogin">Entrar</button>
+        <p class="auth-error" id="loginError"></p>
+      </div>
+      <div class="tab-content" id="tabRegister">
+        <input type="text" id="regUsername" placeholder="Nombre de usuario" />
+        <input type="email" id="regEmail" placeholder="Correo electrónico" />
+        <div class="password-wrap">
+          <input type="password" id="regPassword" placeholder="Contraseña (mín. 6 caracteres)" />
+          <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+          <span class="strength-label" id="strengthLabel"></span>
+        </div>
+        <button class="btn-submit" id="btnDoRegister">Crear cuenta</button>
+        <p class="auth-error" id="registerError"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PÁGINA PRINCIPAL -->
+  <section class="guardados-section">
+    <div class="guardados-header">
+      <div>
+        <h1>Guardados</h1>
+        <span class="guardados-count" id="guardadosCount"></span>
+      </div>
+    </div>
+
+    <!-- Sin sesión -->
+    <div class="guardados-no-session" id="noSession">
+      <div class="guardados-empty-icon">🔖</div>
+      <h2>Inicia sesión para ver tus guardados</h2>
+      <p>Guarda los productos que más te gusten y encuéntralos aquí cuando quieras.</p>
+      <button class="btn-primary" onclick="openModal?.()">Iniciar sesión</button>
+    </div>
+
+    <!-- Vacío -->
+    <div class="guardados-empty" id="emptyState">
+      <div class="guardados-empty-icon">📌</div>
+      <h2>Sin guardados aún</h2>
+      <p>Guarda productos desde el catálogo tocando el marcador en cada tarjeta.</p>
+      <a href="backrooms.html#catalogo" class="btn-primary">Explorar catálogo</a>
+    </div>
+
+    <!-- Grid -->
+    <div class="guardados-grid" id="guardadosGrid">
+      <!-- Skeletons -->
+      <div class="guard-skel"><div class="guard-skel-img"></div><div class="guard-skel-line"></div><div class="guard-skel-line short"></div></div>
+      <div class="guard-skel"><div class="guard-skel-img" style="height:200px"></div><div class="guard-skel-line"></div><div class="guard-skel-line short"></div></div>
+      <div class="guard-skel"><div class="guard-skel-img" style="height:140px"></div><div class="guard-skel-line"></div><div class="guard-skel-line short"></div></div>
+      <div class="guard-skel"><div class="guard-skel-img" style="height:180px"></div><div class="guard-skel-line"></div><div class="guard-skel-line short"></div></div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="backrooms.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
+
+    // Drawer / nav
+    const hamburger = document.getElementById('hamburger');
+    const fullMenu  = document.getElementById('fullMenu');
+    const fullMenuClose = document.getElementById('fullMenuClose');
+    const overlay   = document.getElementById('fullMenuOverlay');
+    const openDrawer  = () => { fullMenu.classList.add('open'); overlay.classList.add('visible'); document.body.style.overflow = 'hidden'; };
+    const closeDrawer = () => { fullMenu.classList.remove('open'); overlay.classList.remove('visible'); document.body.style.overflow = ''; };
+    hamburger?.addEventListener('click', openDrawer);
+    fullMenuClose?.addEventListener('click', closeDrawer);
+    overlay?.addEventListener('click', closeDrawer);
+    document.getElementById('drawerSignout')?.addEventListener('click', () => { if (sb) sb.auth.signOut(); closeDrawer(); });
+    document.getElementById('drawerLogin')?.addEventListener('click', () => { closeDrawer(); setTimeout(() => openModal?.(), 150); });
+    document.getElementById('btnLogin')?.addEventListener('click', () => openModal?.());
+    initAuthModal();
+    initUserDropdown();
+
+    if (!sb) { showNoSession(); return; }
+
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { showNoSession(); return; }
+
+    sb.auth.onAuthStateChange((_e, s) => {
+      if (!s) showNoSession();
+    });
+
+    await loadGuardados(session.user.id);
+  });
+
+  function showNoSession() {
+    document.getElementById('guardadosGrid').innerHTML = '';
+    document.getElementById('noSession').classList.add('visible');
+    document.getElementById('emptyState').classList.remove('visible');
+  }
+
+  async function loadGuardados(userId) {
+    const grid = document.getElementById('guardadosGrid');
+
+    // Cargar desde Supabase (tabla guardados + join con productos si los tienes)
+    const { data, error } = await sb
+      .from('guardados')
+      .select('*, producto:producto_id(*)')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    grid.innerHTML = '';
+
+    if (error || !data || data.length === 0) {
+      document.getElementById('emptyState').classList.add('visible');
+      document.getElementById('guardadosCount').textContent = '';
+      return;
+    }
+
+    document.getElementById('guardadosCount').textContent =
+      data.length + (data.length === 1 ? ' producto guardado' : ' productos guardados');
+
+    data.forEach(item => {
+      const p = item.producto || item;
+      const card = document.createElement('a');
+      card.className = 'guardado-card';
+      card.href = '#';
+      card.innerHTML = `
+        <button class="btn-unsave" data-id="${item.id}" title="Quitar de guardados">✕</button>
+        <div class="guardado-img">${p.emoji || '📦'}</div>
+        <div class="guardado-body">
+          <div class="guardado-name">${p.name || 'Producto'}</div>
+          <div class="guardado-category">${p.cat || ''}</div>
+          <div class="guardado-price">$${p.price || '—'}</div>
+        </div>`;
+      grid.appendChild(card);
+
+      card.querySelector('.btn-unsave')?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        await sb.from('guardados').delete().eq('id', item.id);
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.9)';
+        card.style.transition = 'opacity 0.25s, transform 0.25s';
+        setTimeout(() => { card.remove(); }, 280);
+        const remaining = grid.querySelectorAll('.guardado-card').length - 1;
+        document.getElementById('guardadosCount').textContent =
+          remaining + (remaining === 1 ? ' producto guardado' : ' productos guardados');
+        if (remaining === 0) document.getElementById('emptyState').classList.add('visible');
+      });
+    });
+  }
+  </script>
+</body>
+</html>

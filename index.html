@@ -73,6 +73,10 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
               Guardados
             </a>
+            <a class="user-dropdown-item" href="https://ecolinces.pages.dev" target="_blank">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              EcoLinces
+            </a>
             <button class="user-dropdown-item danger" id="btnLogout">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
               Cerrar sesión
@@ -98,6 +102,10 @@
         <a class="drawer-account-link" href="guardados.html">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
           Guardados
+        </a>
+        <a class="drawer-account-link" href="https://ecolinces.pages.dev" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          EcoLinces
         </a>
       </div>
       <div class="drawer-divider"></div>
@@ -167,6 +175,32 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
           </a>
         </div>
+
+        <!-- Countdown -->
+        <div class="hero-countdown" id="heroCountdown">
+          <span class="hcd-label">Apertura oficial</span>
+          <div class="hcd-timer">
+            <div class="hcd-block">
+              <span class="hcd-num" id="cdDays">00</span>
+              <span class="hcd-unit-label">días</span>
+            </div>
+            <span class="hcd-dot">:</span>
+            <div class="hcd-block">
+              <span class="hcd-num" id="cdHours">00</span>
+              <span class="hcd-unit-label">horas</span>
+            </div>
+            <span class="hcd-dot">:</span>
+            <div class="hcd-block">
+              <span class="hcd-num" id="cdMins">00</span>
+              <span class="hcd-unit-label">min</span>
+            </div>
+            <span class="hcd-dot">:</span>
+            <div class="hcd-block">
+              <span class="hcd-num" id="cdSecs">00</span>
+              <span class="hcd-unit-label">seg</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="hero-illustration">
@@ -218,43 +252,22 @@
       <p class="section-label">Explora por categoría</p>
       <h2 class="section-title">¿Qué estás<br>buscando hoy?</h2>
     </div>
-    <div class="categories-grid fade-in">
-      <a class="cat-card" href="#catalogo">
-        <div class="cat-icon">📓</div>
-        <div class="cat-name">Cuadernos</div>
-        <div class="cat-count">48 productos</div>
-        <div class="cat-arrow">↗</div>
-      </a>
-      <a class="cat-card" href="#catalogo">
-        <div class="cat-icon">🖊️</div>
-        <div class="cat-name">Plumas & Bolígrafos</div>
-        <div class="cat-count">72 productos</div>
-        <div class="cat-arrow">↗</div>
-      </a>
-      <a class="cat-card" href="#catalogo">
-        <div class="cat-icon">🎨</div>
-        <div class="cat-name">Arte & Pintura</div>
-        <div class="cat-count">35 productos</div>
-        <div class="cat-arrow">↗</div>
-      </a>
-      <a class="cat-card" href="#catalogo">
-        <div class="cat-icon">📐</div>
-        <div class="cat-name">Geometría</div>
-        <div class="cat-count">21 productos</div>
-        <div class="cat-arrow">↗</div>
-      </a>
-      <a class="cat-card" href="#catalogo">
-        <div class="cat-icon">✂️</div>
-        <div class="cat-name">Manualidades</div>
-        <div class="cat-count">60 productos</div>
-        <div class="cat-arrow">↗</div>
-      </a>
-      <a class="cat-card" href="#catalogo">
-        <div class="cat-icon">📦</div>
-        <div class="cat-name">Kits escolares</div>
-        <div class="cat-count">18 productos</div>
-        <div class="cat-arrow">↗</div>
-      </a>
+    <div class="categories-grid fade-in" id="categoriesGrid"></div>
+  </section>
+
+  <!-- ── BACKSIES HERO ── -->
+  <section class="backsies-hero fade-in">
+    <div class="backsies-hero-content">
+      <div class="backsies-hero-text">
+        <span class="backsies-tag">⭐ Producto estrella</span>
+        <h2 class="backsies-title">Backsies</h2>
+        <p class="backsies-sub">Sobre sorpresa con lápiz, stickers, sacapuntas y plumón. Incluye cupón con oportunidad de elegir algo gratis o un descuento.</p>
+        <div class="backsies-price">$30 <span>por sobre</span></div>
+        <button class="backsies-cta" onclick="document.getElementById('filterBtns').querySelector('[data-filter=backsies]').click(); document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Ver Backsies →</button>
+      </div>
+      <div class="backsies-hero-img">
+        <img src="https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=800&q=80" alt="Backsie — sobre sorpresa" loading="lazy" />
+      </div>
     </div>
   </section>
 
@@ -267,10 +280,10 @@
       </div>
       <div class="catalog-filters" id="filterBtns">
         <button class="filter-btn active" data-filter="all">Todos</button>
-        <button class="filter-btn" data-filter="cuadernos">Cuadernos</button>
+        <button class="filter-btn" data-filter="backsies">⭐ Backsies</button>
+        <button class="filter-btn" data-filter="utiles">Útiles</button>
         <button class="filter-btn" data-filter="plumas">Plumas</button>
-        <button class="filter-btn" data-filter="arte">Arte</button>
-        <button class="filter-btn" data-filter="kits">Kits</button>
+        <button class="filter-btn" data-filter="stickers">Stickers</button>
       </div>
     </div>
 
@@ -284,7 +297,7 @@
   </section>
 
   <!-- ── BANNER ── -->
-  <section class="banner-section fade-in">
+  <section class="banner-section fade-in" id="bannerSection">
     <h2>Descuentos para<br>estudiantes</h2>
     <p>Crea tu cuenta, sube tu credencial y obtén 15% de descuento en toda la tienda.</p>
     <a href="#" class="btn-banner" id="bannerCta">Crear cuenta gratis</a>

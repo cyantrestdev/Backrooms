@@ -416,7 +416,7 @@
     // Cargar desde Supabase (tabla guardados + join con productos si los tienes)
     const { data, error } = await sb
       .from('guardados')
-      .select('id, producto_id, name, cat, price, emoji, old_price')
+      .select('id, producto_id, name, cat, price, emoji, old_price, img')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
 
@@ -439,7 +439,7 @@
         <button class="btn-unsave" data-id="${item.id}" title="Quitar de guardados">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
         </button>
-        <div class="guardado-img">${item.emoji || '📦'}</div>
+        <div class="guardado-img">${item.img ? `<img src="${item.img}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;border-radius:10px 10px 0 0;">` : (item.emoji || '📦')}</div>
         <div class="guardado-body">
           <div class="guardado-name">${item.name || 'Producto'}</div>
           <div class="guardado-category">${item.cat ? item.cat.charAt(0).toUpperCase() + item.cat.slice(1) : ''}</div>

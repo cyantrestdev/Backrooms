@@ -879,7 +879,7 @@ nav.scrolled {
 }
 
 .categories-section {
-  padding: 100px 40px;
+  padding: 64px 40px 56px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -952,7 +952,7 @@ nav.scrolled {
    CATÁLOGO DE PRODUCTOS
 ══════════════════════════════════════════════ */
 .catalog-section {
-  padding: 0 40px 100px;
+  padding: 48px 40px 100px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -1148,7 +1148,7 @@ nav.scrolled {
 ══════════════════════════════════════════════ */
 .banner-section {
   background: var(--ink);
-  padding: 80px 40px;
+  padding: 64px 40px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -1293,4 +1293,203 @@ footer {
 @media (max-width: 480px) {
   .categories-grid { grid-template-columns: 1fr; }
   .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}
+
+/* ── Backsies ── */
+.product-card--backsie {
+  border: 2px solid var(--brown);
+  background: linear-gradient(135deg, #fdf8f2 0%, #f5e9d8 100%);
+}
+.product-card--backsie .product-img {
+  background: linear-gradient(135deg, #e8d5b8, #d4b896);
+}
+.product-desc {
+  font-family: 'Aller', sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-light);
+  line-height: 1.45;
+  margin: 4px 0 8px;
+}
+
+/* ══════════════════════════════════════════════
+   COUNTDOWN
+══════════════════════════════════════════════ */
+.hero-countdown { margin-top: 28px; display: flex; flex-direction: column; gap: 2px; }
+.hcd-label {
+  font-family: 'Aller', sans-serif; font-size: 0.72rem; font-weight: 700;
+  color: var(--brown); text-transform: uppercase; letter-spacing: 0.1em;
+  opacity: 0.7; margin-bottom: 4px;
+}
+.hcd-timer { display: flex; align-items: flex-start; gap: 0; }
+.hcd-block { display: flex; flex-direction: column; align-items: center; min-width: 52px; }
+/* hcd-num definido en bloque de animación de countdown */
+
+/* ══════════════════════════════════════════════
+   COUNTDOWN — animación flip
+══════════════════════════════════════════════ */
+.hcd-num {
+  font-family: 'Staatliches', sans-serif;
+  font-size: 3.2rem;
+  color: var(--ink);
+  line-height: 1;
+  display: inline-block;
+  min-width: 2ch;
+  text-align: center;
+  position: relative;
+  transition: none;
+}
+
+/* Cuando cambia el número, hace un flip rápido */
+.hcd-num.flip {
+  animation: digitFlip 0.35s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes digitFlip {
+  0%   { transform: translateY(0)    scaleY(1);    opacity: 1; }
+  40%  { transform: translateY(-30%) scaleY(0.6);  opacity: 0.4; }
+  60%  { transform: translateY(25%)  scaleY(0.6);  opacity: 0.4; }
+  100% { transform: translateY(0)    scaleY(1);    opacity: 1; }
+}
+
+.hcd-unit-label {
+  font-family: 'Aller', sans-serif; font-size: 0.6rem; color: var(--text-light);
+  text-transform: uppercase; letter-spacing: 0.06em; margin-top: 3px;
+}
+.hcd-dot { color: var(--brown); opacity: 0.4; font-size: 2.5rem; margin: 4px 2px 0; line-height: 1; }
+
+/* ══════════════════════════════════════════════
+   BACKSIES HERO
+══════════════════════════════════════════════ */
+.backsies-hero {
+  padding: 80px 28px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 24px;
+}
+.backsies-hero-content {
+  max-width: 960px; margin: 0 auto;
+  display: flex; align-items: center; gap: 48px;
+}
+.backsies-hero-text { flex: 1; }
+.backsies-tag {
+  display: inline-block; font-family: 'Aller', sans-serif; font-size: 0.75rem;
+  font-weight: 700; color: var(--brown); background: rgba(92,61,30,0.1);
+  border-radius: 20px; padding: 4px 12px; margin-bottom: 14px;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.backsies-title {
+  font-family: 'Staatliches', sans-serif; font-size: 4rem;
+  color: var(--ink); margin: 0 0 12px; line-height: 1;
+}
+.backsies-sub {
+  font-family: 'Aller', sans-serif; font-size: 0.95rem; color: var(--text-light);
+  line-height: 1.6; max-width: 420px; margin-bottom: 20px;
+}
+.backsies-price {
+  font-family: 'Staatliches', sans-serif; font-size: 2.5rem; color: var(--ink);
+  margin-bottom: 24px; display: flex; align-items: baseline; gap: 8px;
+}
+.backsies-price span { font-size: 1rem; color: var(--text-light); font-family: 'Aller', sans-serif; }
+.backsies-cta {
+  background: var(--ink); color: white; border: none; border-radius: 12px;
+  padding: 14px 32px; font-family: 'Aller', sans-serif; font-size: 1rem;
+  font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s;
+}
+.backsies-cta:hover { background: var(--brown); transform: scale(1.02); }
+.backsies-hero-img {
+  flex: 1; max-width: 420px; border-radius: 20px;
+  overflow: hidden; aspect-ratio: 4/3; flex-shrink: 0;
+}
+.backsies-hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+@media (max-width: 700px) {
+  .backsies-hero-content { flex-direction: column-reverse; gap: 24px; }
+  .backsies-hero-img { max-width: 100%; width: 100%; }
+  .backsies-title { font-size: 3rem; }
+  .hcd-timer { font-size: 2.4rem; }
+}
+
+/* ══════════════════════════════════════════════
+   PRODUCT PHOTO & MODAL
+══════════════════════════════════════════════ */
+.product-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.product-modal-backdrop {
+  position: fixed; inset: 0; background: rgba(30,18,8,0.55);
+  backdrop-filter: blur(4px); z-index: 500;
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; transition: opacity 0.25s ease;
+}
+@media (min-width: 600px) { .product-modal-backdrop { align-items: center; padding: 24px; } }
+.product-modal-backdrop.open { opacity: 1; }
+.product-modal {
+  background: var(--bg-surface); border-radius: 24px 24px 0 0;
+  width: 100%; max-width: 480px; max-height: 92dvh;
+  overflow-y: auto; position: relative;
+  transform: translateY(40px); transition: transform 0.3s cubic-bezier(.22,1,.36,1);
+  display: flex; flex-direction: column;
+}
+@media (min-width: 600px) { .product-modal { border-radius: 24px; transform: translateY(0) scale(0.95); } }
+.product-modal-backdrop.open .product-modal { transform: translateY(0) scale(1); }
+.product-modal-close {
+  position: absolute; top: 14px; right: 14px;
+  background: rgba(255,255,255,0.9); border: none; border-radius: 50%;
+  width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 2; color: var(--ink); transition: background 0.15s;
+}
+.product-modal-close:hover { background: white; }
+.product-modal-img { width: 100%; aspect-ratio: 4/3; position: relative; overflow: hidden; background: var(--beige-light); flex-shrink: 0; }
+.product-modal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.product-modal-body { padding: 20px 24px 28px; display: flex; flex-direction: column; gap: 6px; }
+.product-modal-cat { font-family: 'Aller', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--brown); text-transform: uppercase; letter-spacing: 0.06em; }
+.product-modal-name { font-family: 'Staatliches', sans-serif; font-size: 2rem; color: var(--ink); line-height: 1; margin: 0; }
+.product-modal-desc { font-family: 'Aller', sans-serif; font-size: 0.88rem; color: var(--text-light); line-height: 1.5; margin: 4px 0; }
+.product-modal-price { font-family: 'Staatliches', sans-serif; font-size: 1.8rem; color: var(--ink); display: flex; align-items: baseline; gap: 8px; margin-top: 4px; }
+.product-modal-old { font-size: 1.1rem; color: var(--text-light); text-decoration: line-through; }
+.product-modal-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; gap: 12px; }
+.qty-control { display: flex; align-items: center; border: 1.5px solid var(--border-subtle); border-radius: 10px; overflow: hidden; }
+.qty-btn { background: none; border: none; width: 38px; height: 38px; font-size: 1.3rem; color: var(--ink); cursor: pointer; transition: background 0.15s; display: flex; align-items: center; justify-content: center; }
+.qty-btn:hover { background: var(--beige-light); }
+.qty-val { font-family: 'Staatliches', sans-serif; font-size: 1.2rem; min-width: 32px; text-align: center; color: var(--ink); }
+.product-modal-total { font-family: 'Aller', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--text-mid); }
+.product-modal-cta { margin-top: 12px; background: var(--ink); color: white; border: none; border-radius: 12px; padding: 14px; font-family: 'Aller', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s, transform 0.15s; }
+.product-modal-cta:hover { background: var(--brown); transform: scale(1.01); }
+
+/* ── Backsie card ── */
+.product-card--backsie { border: 2px solid var(--brown); background: linear-gradient(135deg, #fdf8f2 0%, #f5e9d8 100%); }
+.product-card--backsie .product-img { background: linear-gradient(135deg, #e8d5b8, #d4b896); }
+.product-desc { font-family: 'Aller', sans-serif; font-size: 0.78rem; color: var(--text-light); line-height: 1.45; margin: 4px 0 8px; }
+.btn-save { background: var(--ink); color: white; border: none; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s, transform 0.15s; flex-shrink: 0; }
+.btn-save:hover { background: var(--brown); transform: scale(1.1); }
+.btn-save.saved { background: var(--brown); }
+.btn-save.saved svg { fill: white; }
+
+/* ══════════════════════════════════════════════
+   PLACEHOLDER — Finder triste (imagen rota)
+══════════════════════════════════════════════ */
+.product-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: var(--beige-light);
+}
+
+/* Cuando la imagen falla, mostrar el Finder triste como background */
+.product-photo.img-error {
+  object-fit: contain;
+  padding: 20%;
+  box-sizing: border-box;
+  filter: opacity(0.3) sepia(1) saturate(0.5);
+  background: var(--beige-light);
+}
+
+/* También en el modal */
+.product-modal-img img.img-error {
+  object-fit: contain;
+  padding: 20%;
+  box-sizing: border-box;
+  filter: opacity(0.3) sepia(1) saturate(0.5);
+  background: var(--beige-light);
 }

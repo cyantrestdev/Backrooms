@@ -241,6 +241,10 @@ async function setNavLoggedIn(user) {
   const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=d4b896&color=2a1a0e&size=64`;
   if (userAvatar) userAvatar.src = fallback;
 
+  // Ocultar banner de estudiantes cuando hay sesión
+  const bannerSection = document.getElementById('bannerSection');
+  if (bannerSection) bannerSection.style.display = 'none';
+
   // Avatar en hamburger (desktop no lo usa ya que hamburger está oculto)
   if (hamAvatar) {
     hamAvatar.src = fallback;
@@ -287,6 +291,8 @@ function setNavLoggedOut() {
   mobileAvatarBtn?.classList.remove('show');
 
   fillDrawerProfile(null);
+  const bannerSection2 = document.getElementById('bannerSection');
+  if (bannerSection2) bannerSection2.style.display = '';
 }
 
 function fillDrawerProfile(data) {
@@ -346,6 +352,39 @@ document.addEventListener('DOMContentLoaded', () => {
   // Nav visible
   setTimeout(() => navbar?.classList.add('visible'), 200);
 
+  // Countdown — apertura 17 junio 2026 10:30am (Ciudad de México, UTC-6)
+  const openingDate = new Date('2026-06-17T10:30:00-06:00');
+  // Valores previos para detectar cambio y hacer flip
+  const _cdPrev = { days: '', hours: '', mins: '', secs: '' };
+
+  function flipDigit(id, val) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.textContent !== val) {
+      el.textContent = val;
+      el.classList.remove('flip');
+      void el.offsetWidth; // reflow para reiniciar la animación
+      el.classList.add('flip');
+    }
+  }
+
+  function updateCountdown() {
+    const diff = openingDate - new Date();
+    const cd = document.getElementById('heroCountdown');
+    if (!cd) return;
+    if (diff <= 0) {
+      cd.innerHTML = '<span class="hcd-label" style="font-size:1.1rem">🎉 ¡Ya abrimos!</span>';
+      return;
+    }
+    const pad = n => String(Math.floor(n)).padStart(2, '0');
+    flipDigit('cdDays',  pad(diff / 86400000));
+    flipDigit('cdHours', pad((diff % 86400000) / 3600000));
+    flipDigit('cdMins',  pad((diff % 3600000) / 60000));
+    flipDigit('cdSecs',  pad((diff % 60000) / 1000));
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
   // Scroll → nav scrolled
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 20);
@@ -396,15 +435,78 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ── Productos demo ── */
+
+/* ══════════════════════════════════════════════
+   CATEGORÍAS — calculadas desde PRODUCTS
+══════════════════════════════════════════════ */
+const CAT_META = {
+  utiles:   { icon: '✏️',  label: 'Útiles' },
+  plumas:   { icon: '🖊️',  label: 'Plumas & Bolígrafos' },
+  stickers: { icon: '⭐',  label: 'Stickers' },
+  backsies: { icon: '📦',  label: 'Backsies' },
+};
+
+function renderCategories() {
+  const grid = document.getElementById('categoriesGrid');
+  if (!grid) return;
+
+  // Contar productos por categoría (excluir backsies del grid de categorías)
+  const counts = {};
+  PRODUCTS.forEach(p => {
+    if (p.cat === 'backsies') return;
+    counts[p.cat] = (counts[p.cat] || 0) + 1;
+  });
+
+  const entries = Object.entries(counts);
+  if (!entries.length) { grid.style.display = 'none'; return; }
+
+  grid.innerHTML = entries.map(([cat, count]) => {
+    const meta = CAT_META[cat] || { icon: '📦', label: cat.charAt(0).toUpperCase() + cat.slice(1) };
+    return `
+      <a class="cat-card" href="#catalogo" onclick="
+        document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+        document.querySelector('.filter-btn[data-filter=${cat}]')?.classList.add('active');
+        loadProducts('${cat}');
+      ">
+        <div class="cat-icon">${meta.icon}</div>
+        <div class="cat-name">${meta.label}</div>
+        <div class="cat-count">${count} producto${count !== 1 ? 's' : ''}</div>
+        <div class="cat-arrow">↗</div>
+      </a>`;
+  }).join('');
+}
+
 const PRODUCTS = [
-  { id:1, name:'Cuaderno Leuchtturm A5', cat:'cuadernos', price:289, emoji:'📓', badge:'nuevo',     badgeType:'new' },
-  { id:2, name:'Pluma Pilot Metropolitan', cat:'plumas',   price:450, emoji:'🖊️', badge:null,        badgeType:'' },
-  { id:3, name:'Set Acuarelas Winsor 12', cat:'arte',     price:580, emoji:'🎨', badge:'oferta',     badgeType:'sale', oldPrice:720 },
-  { id:4, name:'Cuaderno punteado B5',    cat:'cuadernos', price:199, emoji:'📒', badge:null,        badgeType:'' },
-  { id:5, name:'Plumones Stabilo 20 col', cat:'plumas',   price:340, emoji:'✏️', badge:'popular',   badgeType:'new' },
-  { id:6, name:'Kit Geometría completo',  cat:'kits',     price:220, emoji:'📐', badge:null,        badgeType:'' },
-  { id:7, name:'Pincel pelo de marta x5', cat:'arte',     price:160, emoji:'🖌️', badge:'oferta',    badgeType:'sale', oldPrice:220 },
-  { id:8, name:'Agenda 2025 tapa dura',   cat:'cuadernos',price:350, emoji:'📅', badge:null,        badgeType:'' },
+  // ── Útiles ──
+  { id:1,  name:'Lápiz',                cat:'utiles',   price:7,  img:'https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?w=400&q=80', badge:null, badgeType:'' },
+  { id:2,  name:'Pluma',                cat:'plumas',   price:7,  img:'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=400&q=80', badge:null, badgeType:'' },
+  { id:3,  name:'Marcatexto',           cat:'utiles',   price:12, img:'https://images.unsplash.com/photo-1597075687490-8f673c6c17f6?w=400&q=80', badge:null, badgeType:'' },
+  { id:4,  name:'Sacapuntas tigre',     cat:'utiles',   price:70, img:'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400&q=80', badge:null, badgeType:'' },
+  { id:5,  name:'Sacapuntas',           cat:'utiles',   price:3,  img:'https://images.unsplash.com/photo-1610116306796-6fea9f4fae38?w=400&q=80', badge:null, badgeType:'' },
+  { id:6,  name:'Gis',                  cat:'utiles',   price:35, img:'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&q=80', badge:null, badgeType:'' },
+  { id:7,  name:'Regla doble',          cat:'utiles',   price:15, img:'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80', badge:null, badgeType:'' },
+  { id:8,  name:'Regla normal',         cat:'utiles',   price:10, img:'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80', badge:null, badgeType:'' },
+  { id:9,  name:'Goma',                 cat:'utiles',   price:16, img:'https://images.unsplash.com/photo-1583484963886-cfe2bff2945f?w=400&q=80', badge:null, badgeType:'' },
+  // ── Stickers ──
+  { id:10, name:'Sticker carita (com)',    cat:'stickers', price:21, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  { id:11, name:'Sticker carita (med)',    cat:'stickers', price:16, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  { id:12, name:'Sticker carita (quarter)',cat:'stickers', price:14, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:'oferta', badgeType:'sale', oldPrice:21 },
+  { id:13, name:'Sticker carita (6-5)',    cat:'stickers', price:5,  img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:'oferta', badgeType:'sale', oldPrice:21 },
+  { id:14, name:'Sticker estrella (com)',  cat:'stickers', price:7,  img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  { id:15, name:'Sticker estrella (med)',  cat:'stickers', price:5,  img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  { id:16, name:'Sticker círculo (com)',   cat:'stickers', price:12, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  { id:17, name:'Sticker círculo (med)',   cat:'stickers', price:6,  img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  // ── Stickers kuai / journal ──
+  { id:18, name:'Sticker kuai G.mm (5pz)', cat:'stickers', price:10, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  { id:19, name:'Sticker kuai R.g (10pz)', cat:'stickers', price:10, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  { id:20, name:'Sticker kuai R.c (10pz)', cat:'stickers', price:10, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  { id:21, name:'Sticker kuai G.j (3pz)',  cat:'stickers', price:12, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  { id:22, name:'Sticker kuai 4p (10pz)',  cat:'stickers', price:15, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  // ── Backsies ──
+  { id:23, name:'Backsie', cat:'backsies', price:30,
+    img:'https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=400&q=80',
+    badge:'estrella', badgeType:'new',
+    desc:'Sobre sorpresa con lápiz, stickers, sacapuntas y plumón. Incluye cupón con oportunidad de elegir algo gratis o un descuento.' },
 ];
 
 function loadProducts(filter) {
@@ -437,14 +539,14 @@ function loadProducts(filter) {
     }
 
     grid.innerHTML = filtered.map(p => `
-      <div class="product-card">
+      <div class="product-card ${p.cat === 'backsies' ? 'product-card--backsie' : ''}" onclick="openProductModal(${p.id})" style="cursor:pointer">
         <div class="product-img">
           ${p.badge ? `<span class="product-badge ${p.badgeType}">${p.badge}</span>` : ''}
-          <span style="font-size:3.5rem">${p.emoji}</span>
+          <img class="product-photo" src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 80' shape-rendering='crispEdges'%3E%3Crect width='64' height='80' fill='%23888'/%3E%3C!-- cuerpo mac --%3E%3Crect x='8' y='4' width='48' height='56' fill='%23000'/%3E%3Crect x='6' y='6' width='52' height='52' fill='%23000'/%3E%3Crect x='4' y='8' width='56' height='48' fill='%23000'/%3E%3C!-- borde blanco --%3E%3Crect x='8' y='4' width='48' height='2' fill='%23fff'/%3E%3Crect x='4' y='8' width='2' height='48' fill='%23fff'/%3E%3Crect x='58' y='8' width='2' height='48' fill='%23fff'/%3E%3Crect x='8' y='56' width='48' height='2' fill='%23fff'/%3E%3Crect x='6' y='6' width='2' height='2' fill='%23fff'/%3E%3Crect x='56' y='6' width='2' height='2' fill='%23fff'/%3E%3C!-- pantalla --%3E%3Crect x='10' y='8' width='44' height='32' fill='%23000'/%3E%3Crect x='12' y='10' width='40' height='28' fill='%23111'/%3E%3C!-- ojos X X --%3E%3Crect x='16' y='16' width='4' height='4' fill='%23fff'/%3E%3Crect x='20' y='20' width='4' height='4' fill='%23fff'/%3E%3Crect x='20' y='16' width='4' height='4' fill='%23fff'/%3E%3Crect x='16' y='20' width='4' height='4' fill='%23fff'/%3E%3Crect x='36' y='16' width='4' height='4' fill='%23fff'/%3E%3Crect x='40' y='20' width='4' height='4' fill='%23fff'/%3E%3Crect x='40' y='16' width='4' height='4' fill='%23fff'/%3E%3Crect x='36' y='20' width='4' height='4' fill='%23fff'/%3E%3C!-- boca triste --%3E%3Crect x='20' y='30' width='4' height='4' fill='%23fff'/%3E%3Crect x='24' y='28' width='4' height='2' fill='%23fff'/%3E%3Crect x='28' y='28' width='4' height='2' fill='%23fff'/%3E%3Crect x='32' y='28' width='4' height='2' fill='%23fff'/%3E%3Crect x='36' y='30' width='4' height='4' fill='%23fff'/%3E%3C!-- botón y ranura --%3E%3Crect x='28' y='46' width='8' height='4' fill='%23fff'/%3E%3Crect x='12' y='46' width='6' height='4' fill='%23fff'/%3E%3C!-- base --%3E%3Crect x='16' y='60' width='32' height='8' fill='%23000'/%3E%3Crect x='14' y='58' width='36' height='2' fill='%23fff'/%3E%3C/svg%3E';this.classList.add('img-error')">
         </div>
         <div class="product-info">
           <div class="product-name">${p.name}</div>
-          <div class="product-meta">${p.cat.charAt(0).toUpperCase()+p.cat.slice(1)}</div>
+          ${p.desc ? `<div class="product-desc">${p.desc}</div>` : `<div class="product-meta">${p.cat.charAt(0).toUpperCase()+p.cat.slice(1)}</div>`}
           <div class="product-footer">
             <div class="product-price">
               $${p.price}
@@ -462,6 +564,7 @@ function loadProducts(filter) {
     grid.querySelectorAll('.btn-save').forEach(btn => {
       btn.addEventListener('click', async (e) => {
         e.stopPropagation();
+        e.stopPropagation();
         if (!sb) { openModal?.(); return; }
         const { data: sessionData } = await sb.auth.getSession();
         if (!sessionData?.session?.user) { openModal?.(); return; }
@@ -476,9 +579,8 @@ function loadProducts(filter) {
         } else {
           const product = PRODUCTS.find(p => p.id === productId);
           const { error: saveErr } = await sb.from('guardados').insert({
-            user_id: userId, producto_id: productId,
-            name: product.name, cat: product.cat, price: product.price,
-            emoji: product.emoji, badge: product.badge || null, old_price: product.oldPrice || null
+            user_id: userId,
+            producto_id: productId
           });
           if (saveErr) { console.error('Error al guardar:', saveErr.message); return; }
           btn.classList.add('saved');
@@ -490,6 +592,58 @@ function loadProducts(filter) {
   })();
 }
 
+function openProductModal(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  const existing = document.getElementById('productModal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'productModal';
+  modal.className = 'product-modal-backdrop';
+  modal.innerHTML = `
+    <div class="product-modal" role="dialog" aria-modal="true">
+      <button class="product-modal-close" id="pmClose" aria-label="Cerrar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="product-modal-img">
+        ${p.badge ? `<span class="product-badge ${p.badgeType}">${p.badge}</span>` : ''}
+        <img src="${p.img}" alt="${p.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 80' shape-rendering='crispEdges'%3E%3Crect width='64' height='80' fill='%23888'/%3E%3C!-- cuerpo mac --%3E%3Crect x='8' y='4' width='48' height='56' fill='%23000'/%3E%3Crect x='6' y='6' width='52' height='52' fill='%23000'/%3E%3Crect x='4' y='8' width='56' height='48' fill='%23000'/%3E%3C!-- borde blanco --%3E%3Crect x='8' y='4' width='48' height='2' fill='%23fff'/%3E%3Crect x='4' y='8' width='2' height='48' fill='%23fff'/%3E%3Crect x='58' y='8' width='2' height='48' fill='%23fff'/%3E%3Crect x='8' y='56' width='48' height='2' fill='%23fff'/%3E%3Crect x='6' y='6' width='2' height='2' fill='%23fff'/%3E%3Crect x='56' y='6' width='2' height='2' fill='%23fff'/%3E%3C!-- pantalla --%3E%3Crect x='10' y='8' width='44' height='32' fill='%23000'/%3E%3Crect x='12' y='10' width='40' height='28' fill='%23111'/%3E%3C!-- ojos X X --%3E%3Crect x='16' y='16' width='4' height='4' fill='%23fff'/%3E%3Crect x='20' y='20' width='4' height='4' fill='%23fff'/%3E%3Crect x='20' y='16' width='4' height='4' fill='%23fff'/%3E%3Crect x='16' y='20' width='4' height='4' fill='%23fff'/%3E%3Crect x='36' y='16' width='4' height='4' fill='%23fff'/%3E%3Crect x='40' y='20' width='4' height='4' fill='%23fff'/%3E%3Crect x='40' y='16' width='4' height='4' fill='%23fff'/%3E%3Crect x='36' y='20' width='4' height='4' fill='%23fff'/%3E%3C!-- boca triste --%3E%3Crect x='20' y='30' width='4' height='4' fill='%23fff'/%3E%3Crect x='24' y='28' width='4' height='2' fill='%23fff'/%3E%3Crect x='28' y='28' width='4' height='2' fill='%23fff'/%3E%3Crect x='32' y='28' width='4' height='2' fill='%23fff'/%3E%3Crect x='36' y='30' width='4' height='4' fill='%23fff'/%3E%3C!-- botón y ranura --%3E%3Crect x='28' y='46' width='8' height='4' fill='%23fff'/%3E%3Crect x='12' y='46' width='6' height='4' fill='%23fff'/%3E%3C!-- base --%3E%3Crect x='16' y='60' width='32' height='8' fill='%23000'/%3E%3Crect x='14' y='58' width='36' height='2' fill='%23fff'/%3E%3C/svg%3E';this.classList.add('img-error')">
+      </div>
+      <div class="product-modal-body">
+        <div class="product-modal-cat">${p.cat.charAt(0).toUpperCase()+p.cat.slice(1)}</div>
+        <h2 class="product-modal-name">${p.name}</h2>
+        ${p.desc ? `<p class="product-modal-desc">${p.desc}</p>` : ''}
+        <div class="product-modal-price">$${p.price}${p.oldPrice ? `<span class="product-modal-old">$${p.oldPrice}</span>` : ''}</div>
+        <div class="product-modal-actions">
+          <div class="qty-control">
+            <button class="qty-btn" id="pmMinus">−</button>
+            <span class="qty-val" id="pmQty">1</span>
+            <button class="qty-btn" id="pmPlus">+</button>
+          </div>
+          <div class="product-modal-total" id="pmTotal">Total: $${p.price}</div>
+        </div>
+        <button class="product-modal-cta" id="pmAdd">Agregar al carrito</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(() => modal.classList.add('open'));
+  let qty = 1;
+  const qtyEl = modal.querySelector('#pmQty');
+  const total = modal.querySelector('#pmTotal');
+  const update = () => { qtyEl.textContent = qty; total.textContent = `Total: $${p.price * qty}`; };
+  modal.querySelector('#pmMinus').addEventListener('click', () => { if (qty > 1) { qty--; update(); } });
+  modal.querySelector('#pmPlus').addEventListener('click',  () => { qty++; update(); });
+  modal.querySelector('#pmAdd').addEventListener('click',   () => { addToCart(p.id, qty); closeProductModal(); });
+  modal.querySelector('#pmClose').addEventListener('click', closeProductModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeProductModal(); });
+}
+function closeProductModal() {
+  const modal = document.getElementById('productModal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  setTimeout(() => { modal.remove(); document.body.style.overflow = ''; }, 250);
+}
 function addToCart(id) {
   const product = PRODUCTS.find(p => p.id === id);
   if (!product) return;

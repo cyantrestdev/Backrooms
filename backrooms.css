@@ -1753,6 +1753,7 @@ footer {
   font-size: 0.8rem;
   color: #80868b;
 }
+<<<<<<< HEAD
 
 /* ══════════════════════════════════════════════
    LF_STEREO — reproductor ASCII
@@ -1822,3 +1823,5 @@ footer {
   cursor: pointer;
 }
 .lf-hidden-controls button:hover { background: #e0e0e0; color: #000; border-color: #e0e0e0; }
+=======
+>>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6

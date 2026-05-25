@@ -696,11 +696,7 @@ function addToCart(id) {
         <div class="debug-body">
           <div class="debug-log" id="debugLog"></div>
           <div class="debug-input-row">
-<<<<<<< HEAD
             <span class="debug-prompt" id="debugPrompt">guest@backrooms:~$&nbsp;</span>
-=======
-            <span class="debug-prompt" id="debugPrompt">squid@backrooms:~$&nbsp;</span>
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
             <input class="debug-input" id="debugInput" placeholder="" autocomplete="off" spellcheck="false" />
           </div>
           <div class="debug-commands">
@@ -710,12 +706,7 @@ function addToCart(id) {
               <button class="debug-cmd" data-cmd="ls -la">ls -la</button>
               <button class="debug-cmd" data-cmd="cat README">cat README</button>
               <button class="debug-cmd" data-cmd="ps aux">ps aux</button>
-<<<<<<< HEAD
               <button class="debug-cmd" data-cmd="status">status</button>
-=======
-              <button class="debug-cmd" data-cmd="uname -a">uname -a</button>
-              <button class="debug-cmd" data-cmd="squid --mode ink">squid --mode ink</button>
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
               <button class="debug-cmd" data-cmd="help">help</button>
               <button class="debug-cmd debug-cmd-danger" data-cmd="destroy">destroy</button>
               <button class="debug-cmd" data-cmd="exit">exit</button>
@@ -734,7 +725,6 @@ function addToCart(id) {
 
     const RESPONSES = {
       'whoami': [
-<<<<<<< HEAD
         { t: 'guest', cls: 'debug-line-ok' },
       ],
       'whoami --verbose': [
@@ -758,31 +748,6 @@ function addToCart(id) {
       ],
       'ls .hidden': [
         { t: 'pasaporte_v1.bak   formula.enc   notas.txt   lf_stereo.conf', cls: 'debug-line-ok' },
-=======
-        { t: 'squid', cls: 'debug-line-ok' },
-      ],
-      'whoami --verbose': [
-        { t: 'uid=1337(squid) gid=1337(inklings) grupos=1337(inklings),0(root)', cls: 'debug-line-ok' },
-        { t: 'shell: /bin/bash  •  home: /var/backrooms/squid', cls: 'debug-line-ok' },
-        { t: 'última sesión: hace mucho. demasiado.', cls: 'debug-line-ok' },
-      ],
-      'ls': [
-        { t: 'papelería/   stickers/   backsies/   [REDACTED]/   .hidden/', cls: 'debug-line-ok' },
-      ],
-      'ls -la': [
-        { t: 'total 48', cls: 'debug-line-ok' },
-        { t: 'drwxr-xr-x  6 squid inklings  4096 ' + new Date().toLocaleDateString('es-MX') + ' .', cls: 'debug-line-ok' },
-        { t: 'drwxr-xr-x  3 root  root      4096 ene 01  2023 ..', cls: 'debug-line-ok' },
-        { t: '-rw-------  1 squid inklings   220 ene 01  2023 .bash_history', cls: 'debug-line-ok' },
-        { t: 'drwxr-xr-x  2 squid inklings  4096 ' + new Date().toLocaleDateString('es-MX') + ' papelería/', cls: 'debug-line-ok' },
-        { t: 'drwxr-xr-x  2 squid inklings  4096 ' + new Date().toLocaleDateString('es-MX') + ' stickers/', cls: 'debug-line-ok' },
-        { t: 'drwx------  2 squid inklings  4096 ' + new Date().toLocaleDateString('es-MX') + ' backsies/', cls: 'debug-line-ok' },
-        { t: 'd---------  2 root  root      4096 ene 01  2023 [REDACTED]/', cls: 'debug-line-err' },
-        { t: 'drwx------  2 squid inklings  4096 mar 15  2024 .hidden/', cls: 'debug-line-ok' },
-      ],
-      'ls .hidden': [
-        { t: 'pasaporte_v1.bak   ink_formula.enc   turf_map_final.svg   notas.txt', cls: 'debug-line-ok' },
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
       ],
       'cat README': [
         { t: '╔══════════════════════════════════════╗', cls: 'debug-line-ok' },
@@ -792,15 +757,9 @@ function addToCart(id) {
         { t: '', cls: '' },
         { t: 'Si encontraste esto, bien hecho.', cls: 'debug-line-ok' },
         { t: 'Este panel no existe de manera oficial.', cls: 'debug-line-ok' },
-<<<<<<< HEAD
         { t: 'No lo menciones.', cls: 'debug-line-ok' },
         { t: '', cls: '' },
         { t: '  — admin', cls: 'debug-line-ok' },
-=======
-        { t: 'No lo menciones. Especialmente no a los de papelería.', cls: 'debug-line-ok' },
-        { t: '', cls: '' },
-        { t: '  — squid', cls: 'debug-line-ok' },
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
       ],
       'cat notas.txt': [
         { t: 'cat: notas.txt: No such file or directory', cls: 'debug-line-err' },
@@ -810,16 +769,11 @@ function addToCart(id) {
         { t: '  [x] lanzar tienda', cls: 'debug-line-ok' },
         { t: '  [x] esconder este panel', cls: 'debug-line-ok' },
         { t: '  [ ] que nadie lo encuentre', cls: 'debug-line-err' },
-<<<<<<< HEAD
         { t: '  [ ] mas backsies', cls: 'debug-line-ok' },
-=======
-        { t: '  [ ] más backsies', cls: 'debug-line-ok' },
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
         { t: '  [?] ████████████████ (clasificado)', cls: 'debug-line-ok' },
       ],
       'ps aux': [
         { t: 'USER       PID %CPU %MEM    VSZ   RSS COMMAND', cls: 'debug-line-ok' },
-<<<<<<< HEAD
         { t: 'guest        1  0.0  0.1   1024   512 /sbin/init', cls: 'debug-line-ok' },
         { t: 'guest       42  0.0  0.2   2048  1024 /usr/bin/tienda --prod', cls: 'debug-line-ok' },
         { t: 'guest      133  2.1  0.8   8192  4096 sticker_tracker --live', cls: 'debug-line-ok' },
@@ -830,28 +784,12 @@ function addToCart(id) {
       ],
       'uname -a': [
         { t: 'BackroomsOS 2.4.1-unstable #1 SMP ' + new Date().toUTCString() + ' x86_64 GNU/Linux', cls: 'debug-line-ok' },
-=======
-        { t: 'squid        1  0.0  0.1   1024   512 /sbin/init', cls: 'debug-line-ok' },
-        { t: 'squid       42  0.0  0.2   2048  1024 /usr/bin/tienda --prod', cls: 'debug-line-ok' },
-        { t: 'squid      133  2.1  0.8   8192  4096 sticker_tracker --live', cls: 'debug-line-ok' },
-        { t: 'squid      420  0.7  0.4   4096  2048 backsies_daemon -q', cls: 'debug-line-ok' },
-        { t: 'root       666  ???  ???  ?????  ???? [REDACTED]', cls: 'debug-line-err' },
-        { t: 'squid      999  0.0  0.1   1024   256 bash', cls: 'debug-line-ok' },
-        { t: 'squid     1000  0.0  0.0    512   128 ps aux', cls: 'debug-line-ok' },
-      ],
-      'uname -a': [
-        { t: 'BackroomsOS 2.4.1-unstable #1 SMP ' + new Date().toUTCString() + ' x86_64 squid GNU/Linux', cls: 'debug-line-ok' },
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
       ],
       'uptime': [
         { t: ' ' + ts() + ' up 420 days, 13:37,  1 user,  load average: 0.42, 0.13, 0.07', cls: 'debug-line-ok' },
       ],
       'pwd': [
-<<<<<<< HEAD
         { t: '/var/backrooms/guest', cls: 'debug-line-ok' },
-=======
-        { t: '/var/backrooms/squid', cls: 'debug-line-ok' },
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
       ],
       'date': [
         { t: new Date().toString(), cls: 'debug-line-ok' },
@@ -860,20 +798,14 @@ function addToCart(id) {
         { t: 'hola', cls: 'debug-line-ok' },
       ],
       'sudo su': [
-<<<<<<< HEAD
         { t: '[sudo] contrasena para guest:', cls: 'debug-line-ok' },
         { t: 'guest no esta en el archivo sudoers. Este incidente ha sido reportado.', cls: 'debug-line-err' },
-=======
-        { t: '[sudo] contraseña para squid:', cls: 'debug-line-ok' },
-        { t: 'squid no está en el archivo sudoers. Este incidente ha sido reportado.', cls: 'debug-line-err' },
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
       ],
       'rm -rf /': [
         { t: 'rm: no se puede borrar «/»: Dispositivo o recurso ocupado', cls: 'debug-line-err' },
         { t: '...de nada.', cls: 'debug-line-ok' },
       ],
       'status': [
-<<<<<<< HEAD
         { t: '● backrooms.service — sitio personal', cls: 'debug-line-ok' },
         { t: '   Loaded: loaded (/etc/systemd/system/backrooms.service; enabled)', cls: 'debug-line-ok' },
         { t: '   Active: active (running) since hace un rato', cls: 'debug-line-ok' },
@@ -898,55 +830,6 @@ function addToCart(id) {
         { t: '', cls: '' },
         { t: 'Puede haber otros comandos. Puede que no.', cls: 'debug-line-boot' },
         { t: 'tip: usa ↑↓ para navegar el historial.', cls: 'debug-line-boot' },
-=======
-        { t: '● backrooms.service - Tienda Online de Papelería', cls: 'debug-line-ok' },
-        { t: '   Loaded: loaded (/etc/systemd/system/backrooms.service; enabled)', cls: 'debug-line-ok' },
-        { t: '   Active: active (running) since hace un rato', cls: 'debug-line-ok' },
-        { t: '', cls: '' },
-        { t: '   sistema:    ✓ operativo', cls: 'debug-line-ok' },
-        { t: '   café:       ☕ suficiente (nivel: 73%)', cls: 'debug-line-ok' },
-        { t: '   stickers:   📦 en tránsito — ETA desconocido', cls: 'debug-line-ok' },
-        { t: '   backsies:   ✓ disponibles', cls: 'debug-line-ok' },
-        { t: '   misterio:   ████████████░░ 87%', cls: 'debug-line-ok' },
-        { t: '   [REDACTED]: ????????????? ERROR', cls: 'debug-line-err' },
-      ],
-      'squid': [
-        { t: 'uso: squid [--mode <modo>] [--ink <nivel>] [--turf]', cls: 'debug-line-ok' },
-        { t: 'prueba: squid --mode ink', cls: 'debug-line-ok' },
-      ],
-      'squid --mode ink': [
-        { t: '🦑  SQUID MODE — iniciando protocolo de tinta', cls: 'debug-line-ok' },
-        { t: '    ink level:     ████████████ 100%', cls: 'debug-line-ok' },
-        { t: '    turf covered:  0.0 m²  (dentro de la tienda)', cls: 'debug-line-ok' },
-        { t: '    forma actual:  calamar', cls: 'debug-line-ok' },
-        { t: '', cls: '' },
-        { t: '⚠  advertencia: no se recomienda tintar el inventario.', cls: 'debug-line-err' },
-      ],
-      'squid --turf': [
-        { t: 'Calculando cobertura de terreno...', cls: 'debug-line-ok' },
-        { t: '████████████████████████ 100%', cls: 'debug-line-ok' },
-        { t: 'VICTORIA. La tienda es nuestra.', cls: 'debug-line-ok' },
-      ],
-      'help': [
-        { t: 'Comandos disponibles:', cls: 'debug-line-ok' },
-        { t: '  whoami         — identidad del usuario actual', cls: 'debug-line-ok' },
-        { t: '  whoami --verbose', cls: 'debug-line-ok' },
-        { t: '  ls / ls -la    — listar directorio', cls: 'debug-line-ok' },
-        { t: '  ls .hidden     — archivos ocultos', cls: 'debug-line-ok' },
-        { t: '  cat README     — leer el archivo README', cls: 'debug-line-ok' },
-        { t: '  cat .hidden/notas.txt', cls: 'debug-line-ok' },
-        { t: '  ps aux         — procesos en ejecución', cls: 'debug-line-ok' },
-        { t: '  uname -a       — información del sistema', cls: 'debug-line-ok' },
-        { t: '  uptime / pwd / date', cls: 'debug-line-ok' },
-        { t: '  status         — estado de los servicios', cls: 'debug-line-ok' },
-        { t: '  squid --mode ink / --turf', cls: 'debug-line-ok' },
-        { t: '  sudo su        — (inténtalo)', cls: 'debug-line-ok' },
-        { t: '  rm -rf /       — (inténtalo también)', cls: 'debug-line-ok' },
-        { t: '  exit           — cerrar sesión', cls: 'debug-line-ok' },
-        { t: '', cls: '' },
-        { t: 'tip: usa ↑↓ para navegar el historial de comandos.', cls: 'debug-line-ok' },
-        { t: 'Este panel no existe. Que conste.', cls: 'debug-line-ok' },
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
       ],
     };
 
@@ -954,15 +837,12 @@ function addToCart(id) {
       const line = document.createElement('div');
       line.className = 'debug-line ' + cls;
       line.textContent = text;
-<<<<<<< HEAD
       // aplicar color del tema activo si existe
       if (overlay._theme) {
         if (cls === 'debug-line-ok')    line.style.color = overlay._theme.fg;
         if (cls === 'debug-line-boot')  line.style.color = overlay._theme.boot;
         if (cls === 'debug-line-input') line.style.color = overlay._theme.prompt;
       }
-=======
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
       log.appendChild(line);
       log.scrollTop = log.scrollHeight;
     }
@@ -987,7 +867,6 @@ function addToCart(id) {
         log.innerHTML = '';
         return;
       }
-<<<<<<< HEAD
 
       // ── Comandos secretos (no aparecen en help ni sugerencias) ──
 
@@ -1154,8 +1033,6 @@ function addToCart(id) {
         handleCd(arg);
         return;
       }
-=======
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
       if (key === 'destroy' || key === 'destroy --confirm') {
         runDestroy();
         return;
@@ -1169,7 +1046,6 @@ function addToCart(id) {
       }
     }
 
-<<<<<<< HEAD
     // ── setTheme: cambia colores del panel ──
     const THEMES = {
       cyan:    { fg: '#00e5e5', bg: '#001a1a', border: '#00b3b3', title: '#003333', titlefg: '#00e5e5', prompt: '#00e5e5', boot: '#007a7a', err: '#ff4444' },
@@ -1257,9 +1133,6 @@ function addToCart(id) {
       addLine('', '');
       addLine(node.children.join('   '), 'debug-line-ok');
     }
-=======
-    // ── Secuencia de autodestrucción ──
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
     function runDestroy() {
       // Bloquear ESC y click-fuera mientras explota
       destroyActive = true;
@@ -1282,9 +1155,9 @@ function addToCart(id) {
         { t: 'CPU: 0 PID: 1 Comm: swapper Not tainted', cls: 'debug-line-err', d: 3250 },
         { t: 'Hardware name: Backrooms/squid, BIOS v0.0.1', cls: 'debug-line-err', d: 3400 },
         { t: 'Call Trace:', cls: 'debug-line-err', d: 3550 },
-        { t: '  [<ffffffff810f4b2c>] panic+0xa8/0x1b4', cls: 'debug-line-err', d: 3650 },
-        { t: '  [<ffffffff81a4c3d1>] dns_resolve_destroy+0x31/0x60', cls: 'debug-line-err', d: 3750 },
-        { t: '  [<ffffffff81a4c5aa>] backrooms_shutdown+0x1a/0x30', cls: 'debug-line-err', d: 3850 },
+        { t: '  [<ffffffff810f4b2c' + '>] panic+0xa8/0x1b4', cls: 'debug-line-err', d: 3650 },
+        { t: '  [<ffffffff81a4c3d1' + '>] dns_resolve_destroy+0x31/0x60', cls: 'debug-line-err', d: 3750 },
+        { t: '  [<ffffffff81a4c5aa' + '>] backrooms_shutdown+0x1a/0x30', cls: 'debug-line-err', d: 3850 },
         { t: '', cls: '', d: 4000 },
         { t: '---[ fin del panic ]---', cls: 'debug-line-err', d: 4100 },
       ];
@@ -1378,7 +1251,6 @@ function addToCart(id) {
       dns._reloadHandler = reloadHandler;
     }
 
-<<<<<<< HEAD
     // ── lf_stereo: interfaz de audio ASCII ──
     function showStereoPlayer(audioEl, parentOverlay) {
       if (document.getElementById('lfStereo')) return;
@@ -1438,7 +1310,7 @@ function addToCart(id) {
 │  L  [       ]│  ████░░░░░░░░░░░░░░░░░  │
 │  R  [       ]│  ██░░░░░░░░░░░░░░░░░░░  │
 ├──────────────┴──────────────────────────┤
-│  PAN: C  [&lt;────────●────────&gt;]         │
+│  PAN: C  [\u003C────────●────────\u003E]         │
 │  VOL: ${String(volPct).padStart(3)}  [                    ]         │
 ├─────────────────────────────────────────┤
 │  MODE: [STEREO] [MONO  ]                │
@@ -1493,7 +1365,7 @@ function addToCart(id) {
         const arr = Array(w).fill('─');
         arr[pos] = '●';
         const label = pan === 0 ? 'C' : (pan < 0 ? 'L' : 'R');
-        return label + '  [<' + arr.join('') + '>]';
+        return label + '  [' + '\x3C' + arr.join('') + '\x3E' + ']';
       }
 
       // barra de estado reproducción
@@ -1604,8 +1476,6 @@ function addToCart(id) {
       animVU();
     }
 
-=======
->>>>>>> 46cc3580044eab608e3af5fd207816dd9119c1f6
     // ── Boot sequence ──
     const bootLines = [
       { t: `BACKROOMS DEBUG CONSOLE  build:${Math.floor(Math.random()*9000+1000)}-nightly`, cls: 'debug-line-boot' },

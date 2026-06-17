@@ -316,9 +316,22 @@
     </div>
   </footer>
 
+  <!-- ── QR FERIA (display en vivo) ── -->
+  <div class="event-qr-card" id="eventQrCard">
+    <button class="event-qr-close" id="eventQrClose" aria-label="Ocultar QR">✕</button>
+    <img class="event-qr-img" src="qr-feria.png" alt="Código QR para visitar Backrooms en línea" />
+    <span class="event-qr-label">Escanea y visítanos en línea</span>
+  </div>
+
   <!-- ── SCRIPTS ── -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script src="backrooms.js"></script>
+  <script>
+    // Permite cerrar el QR de feria sin tocar backrooms.js (cambio temporal de display)
+    document.getElementById('eventQrClose')?.addEventListener('click', () => {
+      document.getElementById('eventQrCard')?.remove();
+    });
+  </script>
 </body>
 </html>

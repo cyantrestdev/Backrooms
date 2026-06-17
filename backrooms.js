@@ -94,8 +94,43 @@ function initAuthModal() {
       email:    document.getElementById('loginEmail').value.trim(),
       password: document.getElementById('loginPassword').value
     });
-    if (error) err.textContent = traducirError(error.message);
-    else closeModal();
+    if (error) {
+      err.textContent = traducirError(error.message);
+    } else {
+      closeModal();
+      propagarSesionA('https://ecolinces.pages.dev');
+    }
+  }
+
+  /* ── SSO: propaga la sesión activa al otro sitio con un iframe invisible ── */
+  async function propagarSesionA(otroOrigen) {
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) return;
+      const params = new URLSearchParams({
+        access_token:  session.access_token,
+        refresh_token: session.refresh_token,
+        return_to:     otroOrigen + '/index.html'
+      });
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = 'position:fixed;width:0;height:0;border:0;opacity:0;pointer-events:none;';
+      iframe.src = otroOrigen + '/auth-bridge.html?' + params;
+      document.body.appendChild(iframe);
+      setTimeout(() => iframe.remove(), 4000);
+    } catch (_) { /* SSO es best-effort, fallo silencioso */ }
+  }
+
+  /* ── SSO: cierra sesión en ambos sitios ── */
+  async function cerrarSesionEnAmbos() {
+    try {
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = 'position:fixed;width:0;height:0;border:0;opacity:0;pointer-events:none;';
+      iframe.src = 'https://ecolinces.pages.dev/auth-bridge.html?signout=1';
+      document.body.appendChild(iframe);
+      await new Promise(r => setTimeout(r, 1200));
+      iframe.remove();
+    } catch (_) {}
+    await sb.auth.signOut();
   }
   document.getElementById('btnDoLogin')?.addEventListener('click', doLogin);
   ['loginEmail', 'loginPassword'].forEach(id => {
@@ -198,9 +233,9 @@ function initUserDropdown() {
   });
 
   // Cerrar sesión
-  btnLogout?.addEventListener('click', () => {
-    if (sb) sb.auth.signOut();
+  btnLogout?.addEventListener('click', async () => {
     userDropdown?.classList.remove('open');
+    await cerrarSesionEnAmbos();
   });
 
   // Cerrar dropdown al clicar fuera
@@ -404,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
   overlay?.addEventListener('click', closeDrawer);
 
   // Drawer signout / login
-  document.getElementById('drawerSignout')?.addEventListener('click', () => { if (sb) sb.auth.signOut(); closeDrawer(); });
+  document.getElementById('drawerSignout')?.addEventListener('click', async () => { await cerrarSesionEnAmbos(); closeDrawer(); });
   document.getElementById('drawerLogin')?.addEventListener('click', () => { closeDrawer(); setTimeout(openModal, 150); });
 
   // Botón de login en nav → abrir modal

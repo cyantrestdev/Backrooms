@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backrooms — Sincronizando sesión…</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5ede0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .bridge-wrap { display:flex; flex-direction:column; align-items:center; gap:18px; }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid #e8d5c0;
+      border-top-color: #5c3d1e;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    p { font-size: 0.9rem; color: #8c6a42; }
+  </style>
+</head>
+<body>
+  <div class="bridge-wrap">
+    <div class="spinner"></div>
+    <p>Sincronizando sesión…</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const BRIDGE_CONFIG = {
+      SUPABASE_URL:  'https://sxoauxhtjadeouezbcot.supabase.co',
+      SUPABASE_ANON: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4b2F1eGh0amFkZW91ZXpiY290Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjE4NTQsImV4cCI6MjA5Mjk5Nzg1NH0.wLnmF-oXv73SyYFHmYyoi3hAVPZdVRkkDJdS5hA7QIo'
+    };
+
+    (async () => {
+      const rawSearch = location.search;
+      history.replaceState(null, '', location.pathname);
+
+      const params   = new URLSearchParams(rawSearch);
+      const access   = params.get('access_token');
+      const refresh  = params.get('refresh_token');
+      const signout  = params.get('signout') === '1';
+      const returnTo = params.get('return_to') || null;
+
+      function safeReturn(url) {
+        if (!url) return null;
+        try {
+          const p = new URL(url, location.origin);
+          return p.origin === location.origin ? p.href : null;
+        } catch (_) { return null; }
+      }
+
+      const sb = supabase.createClient(BRIDGE_CONFIG.SUPABASE_URL, BRIDGE_CONFIG.SUPABASE_ANON, {
+        auth: { persistSession: true, autoRefreshToken: true, storage: localStorage }
+      });
+
+      if (signout) {
+        try { await sb.auth.signOut(); } catch (_) {}
+      } else if (access && refresh && access.length > 20 && refresh.length > 20) {
+        try { await sb.auth.setSession({ access_token: access, refresh_token: refresh }); } catch (_) {}
+      }
+
+      const dest = safeReturn(returnTo);
+      if (dest) window.location.replace(dest);
+    })();
+  </script>
+</body>
+</html>

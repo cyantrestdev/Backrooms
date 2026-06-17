@@ -1822,3 +1822,88 @@ footer {
   cursor: pointer;
 }
 .lf-hidden-controls button:hover { background: #e0e0e0; color: #000; border-color: #e0e0e0; }
+
+/* ══════════════════════════════════════════════
+   QR DE FERIA — tarjeta flotante temporal para
+   display en vivo en stand de emprendimiento.
+   Quitar este bloque + el markup en index.html
+   cuando termine el evento.
+══════════════════════════════════════════════ */
+.event-qr-card {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: var(--beige-pale);
+  border: 2px solid var(--beige);
+  border-radius: 18px;
+  padding: 18px 18px 14px;
+  box-shadow: 0 12px 32px rgba(42,26,14,0.18);
+  animation: fadeIn 0.6s 0.3s ease forwards;
+  opacity: 0;
+}
+
+.event-qr-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: var(--brown-mid);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+}
+.event-qr-close:hover { color: var(--ink); }
+
+.event-qr-img {
+  width: 210px;
+  height: 210px;
+  display: block;
+  border-radius: 10px;
+  background: #fff;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.event-qr-label {
+  font-family: 'Aller', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--brown);
+  text-align: center;
+  max-width: 210px;
+}
+
+/* Tablets de ~10-12" en horizontal (viewport real, no 1400px que nunca dispara en tablet) */
+@media (min-width: 768px) and (max-width: 1366px) {
+  .event-qr-card { right: 28px; bottom: 28px; padding: 22px 22px 16px; }
+  .event-qr-img { width: 260px; height: 260px; }
+  .event-qr-label { font-size: 1rem; max-width: 260px; }
+}
+
+/* Monitores/TVs grandes de stand */
+@media (min-width: 1920px) {
+  .event-qr-card { right: 32px; bottom: 32px; padding: 24px 24px 18px; }
+  .event-qr-img { width: 240px; height: 240px; }
+  .event-qr-label { font-size: 0.9rem; max-width: 240px; }
+}
+
+/* Tablet en vertical/portrait — ancho de viewport más angosto que en horizontal */
+@media (max-width: 767px) and (min-height: 700px) {
+  .event-qr-card { right: 20px; bottom: 20px; padding: 20px 20px 14px; }
+  .event-qr-img { width: 200px; height: 200px; }
+  .event-qr-label { font-size: 0.88rem; max-width: 200px; }
+}
+
+/* Celular chico: reduce tamaño y muévelo para no tapar contenido ni el navbar */
+@media (max-width: 480px) and (max-height: 700px) {
+  .event-qr-card { right: 12px; bottom: 12px; padding: 12px 12px 10px; }
+  .event-qr-img { width: 110px; height: 110px; }
+  .event-qr-label { font-size: 0.68rem; max-width: 110px; }
+}

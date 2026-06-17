@@ -511,35 +511,47 @@ function renderCategories() {
   }).join('');
 }
 
+// ⚠️ PENDIENTE: estas imágenes son placeholders genéricos por categoría, NO fotos
+// reales del producto. Las URLs de Unsplash anteriores mostraban contenido que no
+// correspondía (audífonos, cócteles, etc.) — se reemplazaron por placeholders
+// honestos hasta tener fotografía real de cada producto. Reemplazar cada `img`
+// por la foto real en cuanto esté disponible.
+const PH = {
+  utiles:   'placeholder-utiles.svg',
+  plumas:   'placeholder-plumas.svg',
+  stickers: 'placeholder-stickers.svg',
+  backsies: 'placeholder-backsies.svg',
+};
+
 const PRODUCTS = [
   // ── Útiles ──
-  { id:1,  name:'Lápiz',                cat:'utiles',   price:7,  img:'https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?w=400&q=80', badge:null, badgeType:'' },
-  { id:2,  name:'Pluma',                cat:'plumas',   price:7,  img:'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=400&q=80', badge:null, badgeType:'' },
-  { id:3,  name:'Marcatexto',           cat:'utiles',   price:12, img:'https://images.unsplash.com/photo-1597075687490-8f673c6c17f6?w=400&q=80', badge:null, badgeType:'' },
-  { id:4,  name:'Sacapuntas tigre',     cat:'utiles',   price:70, img:'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400&q=80', badge:null, badgeType:'' },
-  { id:5,  name:'Sacapuntas',           cat:'utiles',   price:3,  img:'https://images.unsplash.com/photo-1610116306796-6fea9f4fae38?w=400&q=80', badge:null, badgeType:'' },
-  { id:6,  name:'Gis',                  cat:'utiles',   price:35, img:'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&q=80', badge:null, badgeType:'' },
-  { id:7,  name:'Regla doble',          cat:'utiles',   price:15, img:'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80', badge:null, badgeType:'' },
-  { id:8,  name:'Regla normal',         cat:'utiles',   price:10, img:'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80', badge:null, badgeType:'' },
-  { id:9,  name:'Goma',                 cat:'utiles',   price:16, img:'https://images.unsplash.com/photo-1583484963886-cfe2bff2945f?w=400&q=80', badge:null, badgeType:'' },
+  { id:1,  name:'Lápiz',                cat:'utiles',   price:7,  img:PH.utiles, badge:null, badgeType:'' },
+  { id:2,  name:'Pluma',                cat:'plumas',   price:7,  img:PH.plumas, badge:null, badgeType:'' },
+  { id:3,  name:'Marcatexto',           cat:'utiles',   price:12, img:PH.utiles, badge:null, badgeType:'' },
+  { id:4,  name:'Sacapuntas tigre',     cat:'utiles',   price:70, img:PH.utiles, badge:null, badgeType:'' },
+  { id:5,  name:'Sacapuntas',           cat:'utiles',   price:3,  img:PH.utiles, badge:null, badgeType:'' },
+  { id:6,  name:'Gis',                  cat:'utiles',   price:35, img:PH.utiles, badge:null, badgeType:'' },
+  { id:7,  name:'Regla doble',          cat:'utiles',   price:15, img:PH.utiles, badge:null, badgeType:'' },
+  { id:8,  name:'Regla normal',         cat:'utiles',   price:10, img:PH.utiles, badge:null, badgeType:'' },
+  { id:9,  name:'Goma',                 cat:'utiles',   price:16, img:PH.utiles, badge:null, badgeType:'' },
   // ── Stickers ──
-  { id:10, name:'Sticker carita (com)',    cat:'stickers', price:21, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
-  { id:11, name:'Sticker carita (med)',    cat:'stickers', price:16, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
-  { id:12, name:'Sticker carita (quarter)',cat:'stickers', price:14, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:'oferta', badgeType:'sale', oldPrice:21 },
-  { id:13, name:'Sticker carita (6-5)',    cat:'stickers', price:5,  img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:'oferta', badgeType:'sale', oldPrice:21 },
-  { id:14, name:'Sticker estrella (com)',  cat:'stickers', price:7,  img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
-  { id:15, name:'Sticker estrella (med)',  cat:'stickers', price:5,  img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
-  { id:16, name:'Sticker círculo (com)',   cat:'stickers', price:12, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
-  { id:17, name:'Sticker círculo (med)',   cat:'stickers', price:6,  img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  { id:10, name:'Sticker carita (com)',    cat:'stickers', price:21, img:PH.stickers, badge:null, badgeType:'' },
+  { id:11, name:'Sticker carita (med)',    cat:'stickers', price:16, img:PH.stickers, badge:null, badgeType:'' },
+  { id:12, name:'Sticker carita (quarter)',cat:'stickers', price:14, img:PH.stickers, badge:'oferta', badgeType:'sale', oldPrice:21 },
+  { id:13, name:'Sticker carita (6-5)',    cat:'stickers', price:5,  img:PH.stickers, badge:'oferta', badgeType:'sale', oldPrice:21 },
+  { id:14, name:'Sticker estrella (com)',  cat:'stickers', price:7,  img:PH.stickers, badge:null, badgeType:'' },
+  { id:15, name:'Sticker estrella (med)',  cat:'stickers', price:5,  img:PH.stickers, badge:null, badgeType:'' },
+  { id:16, name:'Sticker círculo (com)',   cat:'stickers', price:12, img:PH.stickers, badge:null, badgeType:'' },
+  { id:17, name:'Sticker círculo (med)',   cat:'stickers', price:6,  img:PH.stickers, badge:null, badgeType:'' },
   // ── Stickers kuai / journal ──
-  { id:18, name:'Sticker kuai G.mm (5pz)', cat:'stickers', price:10, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
-  { id:19, name:'Sticker kuai R.g (10pz)', cat:'stickers', price:10, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
-  { id:20, name:'Sticker kuai R.c (10pz)', cat:'stickers', price:10, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
-  { id:21, name:'Sticker kuai G.j (3pz)',  cat:'stickers', price:12, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
-  { id:22, name:'Sticker kuai 4p (10pz)',  cat:'stickers', price:15, img:'https://images.unsplash.com/photo-1589380790036-9c7dc2087411?w=400&q=80', badge:null, badgeType:'' },
+  { id:18, name:'Sticker kuai G.mm (5pz)', cat:'stickers', price:10, img:PH.stickers, badge:null, badgeType:'' },
+  { id:19, name:'Sticker kuai R.g (10pz)', cat:'stickers', price:10, img:PH.stickers, badge:null, badgeType:'' },
+  { id:20, name:'Sticker kuai R.c (10pz)', cat:'stickers', price:10, img:PH.stickers, badge:null, badgeType:'' },
+  { id:21, name:'Sticker kuai G.j (3pz)',  cat:'stickers', price:12, img:PH.stickers, badge:null, badgeType:'' },
+  { id:22, name:'Sticker kuai 4p (10pz)',  cat:'stickers', price:15, img:PH.stickers, badge:null, badgeType:'' },
   // ── Backsies ──
   { id:23, name:'Backsie', cat:'backsies', price:30,
-    img:'https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=400&q=80',
+    img:PH.backsies,
     badge:'estrella', badgeType:'new',
     desc:'Sobre sorpresa con lápiz, stickers, sacapuntas y plumón. Incluye cupón con oportunidad de elegir algo gratis o un descuento.' },
 ];

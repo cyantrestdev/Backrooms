@@ -175,32 +175,6 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
           </a>
         </div>
-
-        <!-- Countdown -->
-        <div class="hero-countdown" id="heroCountdown">
-          <span class="hcd-label">Apertura oficial</span>
-          <div class="hcd-timer">
-            <div class="hcd-block">
-              <span class="hcd-num" id="cdDays">00</span>
-              <span class="hcd-unit-label">días</span>
-            </div>
-            <span class="hcd-dot">:</span>
-            <div class="hcd-block">
-              <span class="hcd-num" id="cdHours">00</span>
-              <span class="hcd-unit-label">horas</span>
-            </div>
-            <span class="hcd-dot">:</span>
-            <div class="hcd-block">
-              <span class="hcd-num" id="cdMins">00</span>
-              <span class="hcd-unit-label">min</span>
-            </div>
-            <span class="hcd-dot">:</span>
-            <div class="hcd-block">
-              <span class="hcd-num" id="cdSecs">00</span>
-              <span class="hcd-unit-label">seg</span>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="hero-illustration">
@@ -322,6 +296,183 @@
     <img class="event-qr-img" src="qr-feria.png" alt="Código QR para visitar Backrooms en línea" />
     <span class="event-qr-label">Escanea y visítanos en línea</span>
   </div>
+
+  <!-- ══════════════════════════════════════════════
+       OVERLAY DE CIERRE — EXPO (temporal)
+       Pantalla de créditos estética "liminal space".
+       Para QUITARLO: cambia EVENT_CLOSED a false abajo,
+       o borra este bloque completo + su <style> y <script>.
+  ══════════════════════════════════════════════ -->
+  <style>
+    #expoOverlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #2b2a1a;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      font-family: 'Aller', Arial, sans-serif;
+    }
+    #expoOverlay::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,200,0.05) 0px, rgba(255,255,200,0.05) 1px, transparent 1px, transparent 3px),
+        radial-gradient(ellipse at center, rgba(220,210,90,0.18) 0%, rgba(20,20,10,0.85) 75%);
+      mix-blend-mode: overlay;
+      animation: expoFlicker 4.2s infinite;
+      pointer-events: none;
+      z-index: 3;
+    }
+    #expoOverlay::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(90deg, #4a4830 0 38px, #56532f 38px 40px);
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    @keyframes expoFlicker {
+      0%, 100% { opacity: 1; }
+      4% { opacity: 0.85; }
+      6% { opacity: 1; }
+      48% { opacity: 0.96; }
+      50% { opacity: 0.78; }
+      52% { opacity: 1; }
+    }
+
+    .expo-eyebrow-fixed {
+      position: absolute; top: 28px; left: 0; right: 0;
+      z-index: 4;
+      text-align: center;
+      font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase;
+      color: #b8ae6a; opacity: 0.85;
+      text-shadow: 0 0 14px rgba(232,224,168,0.45);
+    }
+
+    .expo-content {
+      position: relative;
+      z-index: 2;
+      max-width: 640px;
+      padding: 40px 32px;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center;
+      color: #e8e0a8;
+      text-shadow: 0 0 14px rgba(232,224,168,0.45);
+      animation: expoEnter 4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    /* Entra desde abajo del viewport y se detiene en su posición centrada
+       natural (translateY(0), que es donde el flex del padre ya lo coloca).
+       No depende de medir alturas: el destino siempre es "el centro". */
+    @keyframes expoEnter {
+      from { transform: translateY(60vh); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    .expo-title {
+      font-family: 'Staatliches', Arial, sans-serif;
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      line-height: 1.15;
+      margin-bottom: 22px;
+      letter-spacing: 1px;
+    }
+    .expo-thanks-label {
+      font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+      color: #6f6a45; margin-bottom: 10px;
+    }
+    .expo-thanks-names {
+      list-style: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      color: #b8ae6a;
+      max-width: 480px;
+      margin: 0 0 24px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .expo-footnote {
+      font-size: 0.78rem; color: #8d8758; letter-spacing: 0.5px;
+    }
+
+    /* Botón independiente: fijo abajo del overlay, no se anima junto con el
+       texto, siempre visible desde el inicio sin esperar a la entrada. */
+    .expo-enter {
+      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+      z-index: 5;
+      background: transparent;
+      border: 1px solid #8d8758;
+      color: #e8e0a8;
+      font-family: 'Aller', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 1px;
+      padding: 10px 22px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, opacity 0.6s ease;
+    }
+    .expo-enter:hover { background: #e8e0a8; color: #2b2a1a; }
+    .expo-enter.expo-fading { opacity: 0; pointer-events: none; }
+
+    @media (max-width: 480px) {
+      .expo-content { padding: 28px 20px; }
+      .expo-thanks-names { font-size: 0.78rem; }
+      .expo-enter { bottom: 24px; }
+    }
+  </style>
+
+  <div id="expoOverlay">
+    <div class="expo-eyebrow-fixed">NO-CLIP // NIVEL 1</div>
+    <div class="expo-content">
+      <h1 class="expo-title">Gracias por<br>encontrar la salida.</h1>
+      <div class="expo-thanks-label">Gracias a todos los que hicieron esto posible</div>
+      <ul class="expo-thanks-names">
+        <li>Grecia Méndez</li>
+        <li>Ian Montaño</li>
+        <li>Sofía Cheng</li>
+        <li>Berenice Meneses</li>
+      </ul>
+      <p class="expo-footnote">El sitio completo vuelve a abrir muy pronto.</p>
+    </div>
+    <button class="expo-enter" id="expoEnterBtn">Entrar de todos modos</button>
+    <audio id="expoAudio" src="expo-theme.mp3" loop preload="auto"></audio>
+  </div>
+
+  <script>
+    // ── Flag de control: cambia a false para desactivar el overlay sin borrar nada ──
+    const EVENT_CLOSED = true;
+
+    (function () {
+      const overlay = document.getElementById('expoOverlay');
+      if (!overlay) return;
+      if (!EVENT_CLOSED) { overlay.remove(); return; }
+
+      const audio = document.getElementById('expoAudio');
+
+      // Los navegadores bloquean autoplay con sonido sin interacción previa.
+      // Intentamos reproducir de inmediato; si falla, esperamos el primer
+      // click/touch en cualquier parte de la página para arrancar la música.
+      function tryPlay() {
+        audio?.play().catch(() => {
+          const start = () => { audio.play().catch(() => {}); cleanup(); };
+          const cleanup = () => {
+            document.removeEventListener('click', start);
+            document.removeEventListener('touchstart', start);
+          };
+          document.addEventListener('click', start, { once: true });
+          document.addEventListener('touchstart', start, { once: true });
+        });
+      }
+      tryPlay();
+
+      document.getElementById('expoEnterBtn')?.addEventListener('click', (e) => {
+        const btn = e.currentTarget;
+        btn.classList.add('expo-fading'); // fade progresivo del botón antes de irse
+        overlay.style.transition = 'opacity 0.6s ease';
+        overlay.style.opacity = '0';
+        if (audio) { audio.pause(); audio.currentTime = 0; }
+        setTimeout(() => overlay.remove(), 600);
+      });
+    })();
+  </script>
 
   <!-- ── SCRIPTS ── -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

@@ -387,39 +387,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Nav visible
   setTimeout(() => navbar?.classList.add('visible'), 200);
 
-  // Countdown — apertura 17 junio 2026 10:30am (Ciudad de México, UTC-6)
-  const openingDate = new Date('2026-06-17T10:30:00-06:00');
-  // Valores previos para detectar cambio y hacer flip
-  const _cdPrev = { days: '', hours: '', mins: '', secs: '' };
-
-  function flipDigit(id, val) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    if (el.textContent !== val) {
-      el.textContent = val;
-      el.classList.remove('flip');
-      void el.offsetWidth; // reflow para reiniciar la animación
-      el.classList.add('flip');
-    }
-  }
-
-  function updateCountdown() {
-    const diff = openingDate - new Date();
-    const cd = document.getElementById('heroCountdown');
-    if (!cd) return;
-    if (diff <= 0) {
-      cd.innerHTML = '<span class="hcd-label" style="font-size:1.1rem">🎉 ¡Ya abrimos!</span>';
-      return;
-    }
-    const pad = n => String(Math.floor(n)).padStart(2, '0');
-    flipDigit('cdDays',  pad(diff / 86400000));
-    flipDigit('cdHours', pad((diff % 86400000) / 3600000));
-    flipDigit('cdMins',  pad((diff % 3600000) / 60000));
-    flipDigit('cdSecs',  pad((diff % 60000) / 1000));
-  }
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-
   // Scroll → nav scrolled
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 20);

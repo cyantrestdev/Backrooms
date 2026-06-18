@@ -437,31 +437,35 @@
   </div>
 
   <script>
-    // ── Flag de control: cambia a false para desactivar el overlay sin borrar nada ──
+    // ── Control de cierre automático ──
+    // El overlay se autodesactiva al llegar EXPO_END_DATE (no hace falta tocar
+    // nada manualmente). Si quieres apagarlo antes de esa fecha, cambia
+    // EVENT_CLOSED a false. Si quieres extender el plazo, mueve la fecha.
     const EVENT_CLOSED = true;
+    const EXPO_END_DATE = new Date('2026-06-20T00:00:00-06:00'); // 2 días desde el 18 jun 2026
 
     (function () {
       const overlay = document.getElementById('expoOverlay');
       if (!overlay) return;
-      if (!EVENT_CLOSED) { overlay.remove(); return; }
+      const expired = new Date() >= EXPO_END_DATE;
+      if (!EVENT_CLOSED || expired) { overlay.remove(); return; }
 
       const audio = document.getElementById('expoAudio');
 
-      // Los navegadores bloquean autoplay con sonido sin interacción previa.
-      // Intentamos reproducir de inmediato; si falla, esperamos el primer
-      // click/touch en cualquier parte de la página para arrancar la música.
-      function tryPlay() {
-        audio?.play().catch(() => {
-          const start = () => { audio.play().catch(() => {}); cleanup(); };
-          const cleanup = () => {
-            document.removeEventListener('click', start);
-            document.removeEventListener('touchstart', start);
-          };
-          document.addEventListener('click', start, { once: true });
-          document.addEventListener('touchstart', start, { once: true });
-        });
+      // Samsung Internet (y varios navegadores móviles) son más estrictos que
+      // Chrome/Firefox: si se llama audio.play() automáticamente al cargar y
+      // falla, el intento posterior dentro de un click puede quedar bloqueado
+      // también. Por eso NO intentamos reproducir antes de que haya un gesto:
+      // el primer click/touch en la página dispara play() de forma directa,
+      // sin ningún intento previo que pueda "ensuciar" el estado del audio.
+      let audioStarted = false;
+      function startAudioOnce() {
+        if (audioStarted || !audio) return;
+        audioStarted = true;
+        audio.play().catch(() => { audioStarted = false; });
       }
-      tryPlay();
+      document.addEventListener('click', startAudioOnce, { once: true });
+      document.addEventListener('touchstart', startAudioOnce, { once: true });
 
       document.getElementById('expoEnterBtn')?.addEventListener('click', (e) => {
         const btn = e.currentTarget;
